@@ -36,7 +36,7 @@ export default {
 .dashboard{
   font-family: 'Courier New';
   text-align: center;
-  border-radius: 5px;
+  border-radius: 4px;
   background-color: #f2f2f2;
   padding: 50px;
   width:30%;
@@ -71,13 +71,13 @@ input[type=password], select {
   margin: 8px 0;
   display: inline-block;
   border: 1px solid #ccc;
-  border-radius: 4px;
   box-sizing: border-box;
+  border-radius: 4px;
 }
 .button {
   font-family: 'Courier New';
   font-size: 30px;
-  border-radius: 8px;
+  border-radius: 4px;
   font-family: 'Courier New';
   background-color: white; 
   color: black; 
@@ -85,7 +85,6 @@ input[type=password], select {
   width: 100%;
   padding: 14px 20px;
   margin: 8px 0;
-  border-radius: 4px;
   cursor: pointer;
 }
 .button:hover{

@@ -3,10 +3,14 @@
 <template>
   <nav v-if="user">
     <div>
-      <p>Hey there {{ user.displayName }}</p>
-      <p class="email">Currently logged in as {{ user.email }}</p>
+      <p>Playing as {{ user.displayName }}</p>
+
     </div>
-    <button @click="handleClick">Logout</button>
+     <div class="title-container">
+      <h1>Elevation of Privilege</h1>
+    
+      </div>
+    <button class="button" @click="handleClick">Logout</button>
   </nav>
 </template>
 
@@ -25,8 +29,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   nav {
+    font-family: 'Courier New';
     padding: 20px;
     border-bottom: 1px solid #eee;
     display: flex;
@@ -35,11 +40,40 @@ export default {
   }
   nav p {
     margin: 2px auto;
-    font-size: 16px;
+    font-size: 20px;
     color: #444;
+    font-family: 'Courier New';
   }
   nav p.email {
     font-size: 14px;
     color: #999;
   }
+  .button {
+  font-family: 'Courier New';
+  font-size: 30px;
+  border-radius: 4px;
+  font-family: 'Courier New';
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+  width: 10%;
+  padding: 14px 20px;
+  margin: 8px 0;
+  cursor: pointer;
+}
+.button:hover{
+  background-color: #45a049;
+     font-family: 'Courier New';
+}
+.title-container{
+     border: 2px solid #4CAF50;
+     width: 30%;
+     border-radius: 4px;
+     position: fixed;
+     text-align: center;
+     left: 34%;
+     right:34%;
+   
+  }
+
 </style>

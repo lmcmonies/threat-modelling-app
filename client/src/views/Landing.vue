@@ -27,7 +27,7 @@ export default {
 .button{
   width:30%;
   font-size: 50px;
-  border-radius: 8px;
+  border-radius: 4px;
   font-family: 'Courier New';
   background-color: white; 
   color: black; 
@@ -37,7 +37,7 @@ export default {
   font-size: 55px;
   font-family: 'Courier New';
 
-  border-radius: 8px;
+  border-radius: 4px;
   background-color: #4CAF50;
   color: white;
   border: none;

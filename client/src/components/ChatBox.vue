@@ -19,7 +19,7 @@ export default {
 <style>
 
 .chatbox{
-    border-radius: 8px;
+    border-radius: 4px;
     border: 2px solid cyan;
     width: 30%;
     float: right;
