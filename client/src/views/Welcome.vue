@@ -33,10 +33,19 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .welcome {
+    font-family: 'Courier New';
     text-align: center;
     padding: 20px 0;
+    /* border: 1px solid #45a049; */
+    width: 30%;
+     position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    
   }
   /* form styles */
   .welcome form {
