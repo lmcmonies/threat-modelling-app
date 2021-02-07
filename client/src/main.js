@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import store from './store/store';
 
 import './assets/main.css';
 
@@ -10,7 +11,7 @@ let app
 
 projectAuth.onAuthStateChanged(() => {
 if(!app){
-    app = createApp(App).use(router).mount('#app')
+    app = createApp(App).use(store).use(router).mount('#app')
 }
 })
 

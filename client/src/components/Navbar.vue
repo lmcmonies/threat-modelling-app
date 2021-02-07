@@ -69,7 +69,7 @@ export default {
      border: 2px solid #4CAF50;
      width: 30%;
      border-radius: 4px;
-     position: fixed;
+     position: absolute;
      text-align: center;
      left: 34%;
      right:34%;
