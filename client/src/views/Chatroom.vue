@@ -4,10 +4,12 @@
     <ChatBox />
     <HandArea />
     <PlayZone />
+    <button class="button" @click="shuffle">Shuffle Cards</button>
+     <button class="button" @click="distribute">Distribute Cards</button>
 
-      <div v-for="card in allCards" v-bind:key="card.id">
+      <!-- <div v-for="card in shuffledCards" v-bind:key="card.id">
            <img class="card" :src="card.src" />
-        </div> 
+        </div>  -->
     
   </div>
 </template>
@@ -25,7 +27,12 @@ import {useState, useGetters, useMutations} from '../composables/useStore'
 export default {
   components: { Navbar, ChatBox, HandArea, PlayZone},
   setup() {
-   const {allCards} = useGetters(['allCards'])
+   const {shuffledCards} = useGetters(['shuffledCards'])
+    const {shuffleCards} = useMutations(['shuffleCards'])
+    const {distributeCards} = useMutations(['distributeCards'])
+
+    const  distribute = () => distributeCards()
+       const  shuffle = () => shuffleCards()
    
     const router = useRouter()
     const { user } = getUser()
@@ -36,10 +43,27 @@ export default {
       }
     })
 
-    return {allCards}
+    return {shuffledCards, distribute, shuffle}
   }
 }
 </script>
 
-<style>
+<style scoped>
+ .button {
+  font-family: 'Courier New';
+  font-size: 30px;
+  border-radius: 4px;
+  font-family: 'Courier New';
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+  width: 15%;
+  padding: 14px 20px;
+  margin: 8px 0;
+  cursor: pointer;
+}
+.button:hover{
+  background-color: #45a049;
+     font-family: 'Courier New';
+}
 </style>

@@ -15,7 +15,7 @@ export function useGetters(arr){
 
 export function useMutations(arr){
     const store = useStore()
-    const keypair = arr.map(n => [m, input => store.commit(m, input)])
+    const keypair = arr.map(m => [m, input => store.commit(m, input)])
     return Object.fromEntries(keypair)
 }
 
