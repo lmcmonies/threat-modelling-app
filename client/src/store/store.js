@@ -21,7 +21,7 @@ export default createStore({
       {id: 13, src: require('../assets/EoPCards/Suits/DenialofService/QDenialofService.png')},
       {id: 14, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/5ElevationofPrivilege.png')},
       {id: 15, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/6ElevationofPrivilege.png')},
-    //   {id: 16, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/7ElevationofPrivilege.png')}
+      {id: 16, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/7ElevationofPrivilege.png')}
     ],
     shuffledCardsArray: [],
 
@@ -33,19 +33,32 @@ export default createStore({
     {
         playerId: 2,
         playerName: 'Grayskull',
-        cards: []
+        cards: [],
     },
     {
         playerId: 3,
         playerName: 'Skeletor',
-        cards: []
-    }
-]
+        cards: [],
+    },
+    {
+        playerId: 4,
+        playerName: 'Superman',
+        cards: [],
+    }],
+
+playZone: [],
+
   },
   getters: {
-    shuffledCards: state => state.shuffledCardsArray
+    shuffledCards: state => state.shuffledCardsArray,
+    playersCards(state){ return state.players[0].cards}
   },
   mutations: {
+
+    updatePlayZone(card, state){
+    state.playZone.push(card)
+    },
+
     shuffleCards(state){
     
         //re orders allCardsArray
@@ -73,15 +86,6 @@ export default createStore({
      console.log("Total Cards: " + numOfCards)
      console.log("Card Distribution: " + cardDistribution)
 
-      let i, j
-    //  for(j=0; j < totalPlayers; j++){
-    //     for(i=0; i < cardDistribution; i++){
-    //       state.players[j].cards.push(state.shuffledCardsArray[i])
-    //       state.shuffledCardsArray.pop(i)
-    //      // console.log(state.shuffledCardsArray[i])
-    //     }
-    //  }
-
     let min = 0
     let max = cardDistribution
     state.players.forEach(function(player){
@@ -90,11 +94,6 @@ export default createStore({
      max += cardDistribution
      console.log(player.playerId, player.cards)
     })
-
-    //  state.players.cards.forEach(function(card){
-    //      console.log(card.id)
-    //  })
-
 },
   },
   actions: {

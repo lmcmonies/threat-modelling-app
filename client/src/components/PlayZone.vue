@@ -1,6 +1,6 @@
 <template>
   <div class='play-zone'>
-   <h1 class="label">Play Zone</h1>
+
   </div>
 </template>
 

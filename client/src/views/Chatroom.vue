@@ -2,15 +2,19 @@
   <div class="container">
     <Navbar />
     <ChatBox />
-    <HandArea />
     <PlayZone />
-    <button class="button" @click="shuffle">Shuffle Cards</button>
-     <button class="button" @click="distribute">Distribute Cards</button>
 
-      <!-- <div v-for="card in shuffledCards" v-bind:key="card.id">
+     <div class="hand-area"><HandArea />
+       <button class="button" @click="shuffle">Shuffle Cards</button>
+     <button class="button" @click="distribute">Distribute Cards</button></div>
+     
+  
+      
+
+       <!-- <div v-for="card in shuffledCards" v-bind:key="card.id">
            <img class="card" :src="card.src" />
-        </div>  -->
-    
+        </div>  
+     -->
   </div>
 </template>
 
@@ -65,5 +69,10 @@ export default {
 .button:hover{
   background-color: #45a049;
      font-family: 'Courier New';
+}
+.hand-area{
+   position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 </style>

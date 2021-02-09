@@ -10,6 +10,7 @@ export function useState(arr){
 export function useGetters(arr){
     const store = useStore()
     const keypair = arr.map(g => [g, computed(() => store.getters[g])])
+    console.log(keypair)
     return Object.fromEntries(keypair)
 }
 

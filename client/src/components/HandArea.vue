@@ -1,34 +1,58 @@
 <template>
   <div class="hand-area">
-      
-      <div v-for="card in playersCardsArray" v-bind:key="card.id">
+       
+      <!-- <div v-for="card in playersCardsArray" v-bind:key="card.id">
             <figure><img class="card" :src="card.src" @click="transferCard(card)" /></figure>
            
-      </div>
-      <div v-for="card in clickedCard" v-bind:key="card.id">
-           <h1>{{card.src}}</h1>
-           
-      </div>
+      </div> -->
+   
+        <div v-for="card in cards" v-bind:key="card.id">
+            <figure><img class="card" :src="card.src" @click="transfer(card)"/></figure>
+        </div> 
+  
   </div>
 </template>
 
 <script>
-
+import {useState, useGetters, useMutations} from '../composables/useStore'
+import {useStore} from 'vuex'
+import {computed} from 'vue'
 export default {
-    props:['playersCardsArray'],
-    data(){
-        return{
-         clickedCard: []
-        }
-    },
-    components:{
+    setup(){
+
+        //  const {getCards} = useGetters(['playersCards'])
+        //   const  cards = () => getCards()
         
-    },
-    methods: {
-        transferCard(card){
-            this.clickedCard.push(card);
-        }
+          const store = useStore()
+          const cards = computed(() => store.state.players[0].cards)
+
+            const {updatePlayZone} = useMutations(['updatePlayZone'])
+
+            const transfer = () => updatePlayZone()
+
+        //   function transferCard(card){
+        //     store.state.players[0].playZone.push(card)
+        //   }
+        
+            return { transfer, cards}
+
+            
     }
+    // props:['playersCardsArray'],
+    // data(){
+    //     return{
+    //      clickedCard: []
+    //     }
+    // },
+    // components:{
+        
+    // },
+    // methods: {
+    //     transferCard(card){
+    //         this.clickedCard.push(card);
+    //     }
+    // }
+   
 
 
 }
@@ -78,6 +102,24 @@ export default {
 	-webkit-transform: scale(1.1);
 	transform: scale(1.1);
      opacity: 50%;
+}
+.button {
+  font-family: 'Courier New';
+  font-size: 30px;
+  border-radius: 4px;
+  font-family: 'Courier New';
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+  width: 15%;
+  padding: 14px 20px;
+  margin: 8px 0;
+  cursor: pointer;
+}
+
+.button:hover{
+  background-color: #45a049;
+     font-family: 'Courier New';
 }
 
 </style>
