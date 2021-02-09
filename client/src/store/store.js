@@ -50,13 +50,18 @@ playZone: [],
 
   },
   getters: {
-    shuffledCards: state => state.shuffledCardsArray,
-    playersCards(state){ return state.players[0].cards}
+    shuffledCard(state){return state.shuffledCardsArray},
+    playersCards(state){ return state.players[0].cards},
+    playZoneCard(state){return state.playZone}
   },
   mutations: {
 
-    updatePlayZone(card, state){
-    state.playZone.push(card)
+    updatePlayZone(state, card){
+        if(state.playZone.length < 1){
+            state.playZone.push(card)
+        }
+
+    console.log('card: ', card.src)
     },
 
     shuffleCards(state){
@@ -97,10 +102,9 @@ playZone: [],
 },
   },
   actions: {
-    //   shuffledCards(){
-    //       context.commit('shuffleCards')
-    //       console.log('Shuffling Cards')
-    //   }
+  updatePlayZone({commit}, card){
+  commit('updatePlayZone', card )
+  }
       
     
 }

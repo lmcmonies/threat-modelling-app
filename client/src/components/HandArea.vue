@@ -7,14 +7,14 @@
       </div> -->
    
         <div v-for="card in cards" v-bind:key="card.id">
-            <figure><img class="card" :src="card.src" @click="transfer(card)"/></figure>
+            <figure><img class="card" :src="card.src" @click="updatePlayZone(card)"/></figure>
         </div> 
   
   </div>
 </template>
 
 <script>
-import {useState, useGetters, useMutations} from '../composables/useStore'
+import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
 import {useStore} from 'vuex'
 import {computed} from 'vue'
 export default {
@@ -26,15 +26,15 @@ export default {
           const store = useStore()
           const cards = computed(() => store.state.players[0].cards)
 
-            const {updatePlayZone} = useMutations(['updatePlayZone'])
+            const {updatePlayZone} = useActions(['updatePlayZone'])
 
-            const transfer = () => updatePlayZone()
+           
 
         //   function transferCard(card){
         //     store.state.players[0].playZone.push(card)
         //   }
         
-            return { transfer, cards}
+            return {updatePlayZone, cards}
 
             
     }

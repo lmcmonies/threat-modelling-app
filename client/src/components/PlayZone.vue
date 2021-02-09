@@ -1,15 +1,20 @@
 <template>
   <div class='play-zone'>
 
+    <div v-for="card in playZoneCard" v-bind:key="card.id">
+            <figure><img class="card" :src="card.src"/></figure>
+        </div> 
+
   </div>
 </template>
 
 <script>
+import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
 export default {
-data (){
-    return{
-     potentialPlay: []
-    }
+setup(){
+   const {playZoneCard} = useGetters(['playZoneCard'])
+
+   return{playZoneCard}
 }
 }
 </script>
@@ -35,7 +40,28 @@ data (){
 
     
 }
-
+.card{
+        float:left; 
+        width:215px;
+        height:350px;
+        position:relative;
+        background-size: 100% 100%;
+        bottom: 50%;
+        padding: 0px 15px;
+        word-wrap: normal;
+     
+}
+.play-zone figure img {
+	-webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+.play-zone figure:hover img {
+	-webkit-transform: scale(1.1);
+	transform: scale(1.1);
+     opacity: 50%;
+}
 
 .label{
      font-family: 'Courier New';

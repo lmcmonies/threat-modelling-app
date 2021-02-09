@@ -1,12 +1,14 @@
 <template>
   <div class="container">
     <Navbar />
+    <button class="button" @click="shuffle">Shuffle Cards</button>
+     <button class="button" @click="distribute">Distribute Cards</button>
     <ChatBox />
-    <PlayZone />
+    <div class="play-zone">    <PlayZone /></div>
 
+     
      <div class="hand-area"><HandArea />
-       <button class="button" @click="shuffle">Shuffle Cards</button>
-     <button class="button" @click="distribute">Distribute Cards</button></div>
+       </div>
      
   
       
@@ -53,6 +55,10 @@ export default {
 </script>
 
 <style scoped>
+
+.container{
+  overflow: auto;
+}
  .button {
   font-family: 'Courier New';
   font-size: 30px;
@@ -71,8 +77,15 @@ export default {
      font-family: 'Courier New';
 }
 .hand-area{
+   position: absolute;
+    bottom: 0;
+    height: 70%;
+    width: 90%;
+}
+.play-zone{
    position: fixed;
     bottom: 0;
-    width: 100%;
+    height: 60%;
+    width: 20%;
 }
 </style>

@@ -20,3 +20,9 @@ export function useMutations(arr){
     return Object.fromEntries(keypair)
 }
 
+export function useActions(arr){
+    const store = useStore()
+    const keypair = arr.map(a => [a, input => store.dispatch(a, input)])
+    return Object.fromEntries(keypair)
+}
+
