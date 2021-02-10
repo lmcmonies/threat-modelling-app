@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="handleSubmit">
-    <input type="text" required placeholder="display name" v-model="displayName">
+    <input type="text" required placeholder="username" v-model="username">
     <input type="email" required placeholder="email" v-model="email">
     <input type="password" required placeholder="password" v-model="password">
     <div class="error">{{ error }}</div>
@@ -15,18 +15,18 @@ export default {
   setup(props, context) {
     // console.log(context)
     // refs
-    const displayName = ref('')
+    const username = ref('')
     const email = ref('')
     const password = ref('')
     // useSignup
     const { error, signup } = useSignup()
     const handleSubmit = async () => {
-      await signup(email.value, password.value, displayName.value)
+      await signup(email.value, password.value, username.value)
       if (!error.value) {
         context.emit('signup')
       }      
     }
-    return { displayName, email, password, handleSubmit, error }
+    return { username, email, password, handleSubmit, error }
   }
 }
 </script>

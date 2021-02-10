@@ -4,11 +4,8 @@
     <button class="button" @click="shuffle">Shuffle Cards</button>
      <button class="button" @click="distribute">Distribute Cards</button>
     <ChatBox />
-    <div class="play-zone">    <PlayZone /></div>
-
-     
-     <div class="hand-area"><HandArea />
-       </div>
+    <PlayZone class="play-zone" />
+     <HandArea class="hand-area"/>
      
   
       
@@ -77,9 +74,9 @@ export default {
      font-family: 'Courier New';
 }
 .hand-area{
-   position: absolute;
+   position: fixed;
     bottom: 0;
-    height: 70%;
+    height: 30%;
     width: 90%;
 }
 .play-zone{

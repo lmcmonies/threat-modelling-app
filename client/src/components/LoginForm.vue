@@ -10,24 +10,32 @@
 <script>
 import { ref } from 'vue'
 import useLogin from '../composables/useLogin'
+import {projectFirestore, aUnion} from '../firebase/config'
 
 export default {
   setup(props, context) {
     // refs
     const email = ref('')
     const password = ref('')
+
+      //let data =
+          // {username:{cards:[],totalPoints:0, isReady: false}}
+
+    // let data = ["12345678"]
+   // var docRef = projectFirestore.collection('games').doc('2X0kk3Wu4fzhv3N3dn2d');
+        
     const { error, login } = useLogin()
 
     const handleSubmit = async () => {
-
       await login(email.value, password.value)
+    //  await docRef.update({players: aUnion(data)})
 
       if (!error.value) {
         console.log('user logged in')
         context.emit('login')
       }
     }
-    return { email, password, handleSubmit, error }
+    return { email, password, handleSubmit, error}
   }
 }
 </script>

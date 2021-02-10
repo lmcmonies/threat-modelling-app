@@ -11,20 +11,42 @@
     
       </div>
     <button class="button" @click="handleClick">Logout</button>
+     <button  v-on:click="isReady=!isReady" v-bind:class="{isReady: isReady}" @click="readyToPlay">Ready To Play?</button>
   </nav>
 </template>
 
 <script>
 import useLogout from '../composables/useLogout'
 import getUser from '../composables/getUser'
+import {projectFirestore, aUnion} from '../firebase/config'
+import {ref} from 'vue'
 export default {
   setup() {
     const { logout, error } = useLogout()
     const { user } = getUser()
+    const isReady = ref(false)
+     let data = 
+     {[`${user.value.email}`]:
+      {cards:[],
+       totalPoints:0,
+       isReady: false
+      }
+    }
+
+    // let data = ["12345678"]
+    var docRef = projectFirestore.collection('games').doc('2X0kk3Wu4fzhv3N3dn2d');
+        
     const handleClick = async () => {
       await logout()
     }
-    return { handleClick, user }
+
+    const readyToPlay = async () =>{
+      isReady.value=true
+      console.log(isReady)
+      await docRef.update({players: aUnion(data)})
+
+    }
+    return { handleClick, user, readyToPlay, isReady }
   }
 }
 </script>
@@ -75,5 +97,20 @@ export default {
      right:34%;
    
   }
+ 
+   .isReady{
+     font-family: 'Courier New';
+  font-size: 30px;
+  border-radius: 4px;
+  font-family: 'Courier New';
+  background-color:#4CAF50; 
+  border: 2px solid #4CAF50;
+  width: 10%;
+  padding: 14px 20px;
+  margin: 8px 0;
+  cursor: pointer;
+ border: 2px solid #4CAF50;
+  }
+
 
 </style>
