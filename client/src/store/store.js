@@ -4,6 +4,7 @@ import {createStore} from 'vuex'
 
 export default createStore({
   state: {
+    gameId: '',
     allCardsArray: 
     [
       {id: 1, src: require('../assets/EoPCards/Suits/DenialofService/2DenialofService.png')},
@@ -52,9 +53,14 @@ playZone: [],
   getters: {
     shuffledCard(state){return state.shuffledCardsArray},
     playersCards(state){ return state.players[0].cards},
-    playZoneCard(state){return state.playZone}
+    playZoneCard(state){return state.playZone},
+    getGameId(state){return state.gameId}
   },
   mutations: {
+    updateGameId(state, id){
+    state.gameId = id
+    console.log(id)
+    },
 
     updatePlayZone(state, card){
         if(state.playZone.length < 1){
@@ -104,6 +110,10 @@ playZone: [],
   actions: {
   updatePlayZone({commit}, card){
   commit('updatePlayZone', card )
+  },
+
+  updateGameId({commit}, id ){
+    commit('updateGameId', id)
   }
       
     

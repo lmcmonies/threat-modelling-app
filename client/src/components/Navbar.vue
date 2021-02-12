@@ -8,9 +8,10 @@
     </div>
      <div class="title-container">
       <h1>Elevation of Privilege</h1>
+         <button class="button" @click="handleClick">Logout</button>
     
       </div>
-    <button class="button" @click="handleClick">Logout</button>
+  
      <button  v-on:click="isReady=!isReady" v-bind:class="{isReady: isReady}" @click="readyToPlay">Ready To Play?</button>
   </nav>
 </template>
@@ -29,7 +30,7 @@ export default {
      {[`${user.value.email}`]:
       {cards:[],
        totalPoints:0,
-       isReady: false
+       isReady: true
       }
     }
 
