@@ -34,7 +34,7 @@ const routes = [
   beforeEnter: requireAuth
 },
  {
-  path: '/chatroom',
+  path: "/chatroom/:id",
   name: 'chatroom',
   component: Chatroom,
   beforeEnter: requireAuth

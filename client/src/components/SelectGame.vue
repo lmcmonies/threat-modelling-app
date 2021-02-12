@@ -12,7 +12,7 @@
      </select>
     <button class="button" @click="createGame">Create</button>
     </section>
-    {{gam}}
+ 
 
     <section>
       <p>Join Game</p>
@@ -30,14 +30,15 @@ import {ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
 import {useStore} from 'vuex'
+
 export default {
 setup(){
  let gameName = ref("")
  let gameId =  ref("")
  let numOfPlayers = ref("")
 
-const router = useRouter()
 
+  const router = useRouter()
   const store = useStore()
 
 const gam = computed(() => store.state.gameId)
@@ -52,17 +53,11 @@ var docRef = projectFirestore.collection('games');
    currentTurn: "", playZoneCardId: "", players: [] };
    updateGameId(id);
    await docRef.doc(id).set(newGame);
-    
-   // enterChat();
+   router.push({name: 'chatroom', params:{id: id}})
  }
 
- const enterChat =  () => {
-        
-       router.push({name: 'chatroom'})
-    }
-
 const joinGame = async () =>{
-
+   router.push({name: 'chatroom', params:{id: gameId.value.toString()}})
  }
 
 return {gameName, gameId, createGame, numOfPlayers, joinGame, updateGameId, gam}

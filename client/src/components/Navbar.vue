@@ -4,6 +4,7 @@
   <nav v-if="user">
     <div>
       <p>Playing as {{ user.displayName }}</p>
+    
 
     </div>
      <div class="title-container">
@@ -11,16 +12,22 @@
          <button class="button" @click="handleClick">Logout</button>
     
       </div>
+      
   
      <button  v-on:click="isReady=!isReady" v-bind:class="{isReady: isReady}" @click="readyToPlay">Ready To Play?</button>
+    
   </nav>
 </template>
 
 <script>
+import {computed} from 'vue'
 import useLogout from '../composables/useLogout'
 import getUser from '../composables/getUser'
 import {projectFirestore, aUnion} from '../firebase/config'
+import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
 import {ref} from 'vue'
+import {useRoute} from 'vue-router'
+import {useStore} from 'vuex'
 export default {
   setup() {
     const { logout, error } = useLogout()
@@ -33,9 +40,17 @@ export default {
        isReady: true
       }
     }
+ const route = useRoute()
 
-    // let data = ["12345678"]
-    var docRef = projectFirestore.collection('games').doc('2X0kk3Wu4fzhv3N3dn2d');
+  const store = useStore()
+  //const {gameId} = useGetters(['getGameId'])
+
+
+  let gameId = route.params.id.toString()
+    //console.log(id)
+//let gameId = computed(() => store.state.gameId.toString())
+
+    var docRef = projectFirestore.collection('games').doc(`${gameId}`);
         
     const handleClick = async () => {
       await logout()
@@ -44,10 +59,11 @@ export default {
     const readyToPlay = async () =>{
       isReady.value=true
       console.log(isReady)
+
       await docRef.update({players: aUnion(data)})
 
     }
-    return { handleClick, user, readyToPlay, isReady }
+    return { handleClick, user, readyToPlay, isReady}
   }
 }
 </script>
