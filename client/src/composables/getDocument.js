@@ -14,13 +14,8 @@ const getDocument = (collection, documentId) => {
     //Contains all docs and data at that moment in time
         documentRef.onSnapshot((snap) => {
          let result = {}
-         
          result = snap.data().createdAt && {...snap.data(), id:snap.id}
-         console.log("Result: " + result.playersJoined)
-        
          document.value = result
-         console.log("DOCO: " + document.value.playersJoined)
-         console.log("DOCO: " + document.value.heman.totalPoints)
          error.value = null,
 
         (err) => {

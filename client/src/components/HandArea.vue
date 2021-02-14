@@ -4,7 +4,7 @@
             <figure><img class="card" :src="card.src" @click="transferCard(card)" /></figure>
            
       </div> -->
-   
+      <button class="button" @click="showResult">Show Result</button> 
         <!-- <div v-for="card in cards" v-bind:key="card.id">
            <figure><img class="card" :src="card.src" @click="updatePlayZone(card)"/></figure>
         </div>  -->
@@ -42,7 +42,7 @@ export default {
         const route = useRoute()
 
   const store = useStore()
-  //const {gameId} = useGetters(['getGameId'])
+  const {shuffleCards} = useMutations(['shuffleCards'])
 
 
   let documentId = route.params.id.toString()
@@ -50,7 +50,13 @@ export default {
 
       const { document, error} =  getDocument(collection, documentId)
       
-    console.log("Players Joined:"+ document.playersJoined)
+      let showResult = () =>{
+        let data = {
+          id:document.value.id,
+          playersJoined: document.value.playersJoined
+        }
+    console.log("Players Joined:"+ data.playersJoined)
+      }
     //console.log(error)
     //const fDoc = computed(() => {
     //   if(doc.value){
@@ -63,14 +69,19 @@ export default {
     // })
     
 
-    
-    // if (doc['playersJoined'] === doc['totalPlayers']) {
-    //     console.log(d.playersJoined)
-    //     console.log("HELLO VIETNAM")
-    //  }
+    watch(document, () => {
+       let data = {
+          id:document.value.id,
+          playersJoined: document.value.playersJoined,
+          totalPlayers: document.value.totalPlayers
+        }
+     if(data.playersJoined === data.totalPlayers) {
+      shuffleCards()
+     }
+    })
+     
 
-
-    return {document, error}
+    return {document, error, showResult}
             
     }
 }
