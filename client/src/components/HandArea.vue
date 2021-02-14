@@ -1,14 +1,18 @@
 <template>
   <div class="hand-area">
-       
       <!-- <div v-for="card in playersCardsArray" v-bind:key="card.id">
             <figure><img class="card" :src="card.src" @click="transferCard(card)" /></figure>
            
       </div> -->
    
-        <div v-for="card in cards" v-bind:key="card.id">
-            <figure><img class="card" :src="card.src" @click="updatePlayZone(card)"/></figure>
-        </div> 
+        <!-- <div v-for="card in cards" v-bind:key="card.id">
+           <figure><img class="card" :src="card.src" @click="updatePlayZone(card)"/></figure>
+        </div>  -->
+      <div v-for="doc in document" :key="doc.id" class="single">
+           <!-- <span class="name">{{doc.name}}</span> -->
+            <span class="playersJoined">{{doc.playersJoined}}</span>
+            <span class="totalPLayers">{{doc.totalPlayers}}</span>
+        </div>
   
   </div>
 </template>
@@ -16,45 +20,59 @@
 <script>
 import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
 import {useStore} from 'vuex'
-import {computed} from 'vue'
+import {useRoute} from 'vue-router'
+import getDocument from '../composables/getDocument'
+import { computed, onUpdated, ref, watch } from 'vue'
 export default {
     setup(){
 
         //  const {getCards} = useGetters(['playersCards'])
         //   const  cards = () => getCards()
         
-          const store = useStore()
-          const cards = computed(() => store.state.players[0].cards)
+         // const store = useStore()
+         // const cards = computed(() => store.state.players[0].cards)
 
-            const {updatePlayZone} = useActions(['updatePlayZone'])
+           // const {updatePlayZone} = useActions(['updatePlayZone'])
 
            
 
         //   function transferCard(card){
         //     store.state.players[0].playZone.push(card)
         //   }
-        
-            return {updatePlayZone, cards}
+        const route = useRoute()
 
+  const store = useStore()
+  //const {gameId} = useGetters(['getGameId'])
+
+
+  let documentId = route.params.id.toString()
+  let collection = 'games'
+
+      const { document, error} =  getDocument(collection, documentId)
+      
+    console.log("Players Joined:"+ document.playersJoined)
+    //console.log(error)
+    //const fDoc = computed(() => {
+    //   if(doc.value){
+    //      return doc.value.map(doc => {
+    //        console.log("FDOC: " + doc.gameId)
+    //           return {...doc}
+         
+    //     })
+    //  }
+    // })
+    
+
+    
+    // if (doc['playersJoined'] === doc['totalPlayers']) {
+    //     console.log(d.playersJoined)
+    //     console.log("HELLO VIETNAM")
+    //  }
+
+
+    return {document, error}
             
     }
-    // props:['playersCardsArray'],
-    // data(){
-    //     return{
-    //      clickedCard: []
-    //     }
-    // },
-    // components:{
-        
-    // },
-    // methods: {
-    //     transferCard(card){
-    //         this.clickedCard.push(card);
-    //     }
-    // }
-   
-
-
 }
 </script>
 
@@ -79,6 +97,9 @@ export default {
     transform: translate(-50%, -50%);
 
     
+}
+.single{
+  background: white;
 }
 
 .card{

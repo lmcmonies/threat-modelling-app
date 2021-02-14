@@ -23,7 +23,7 @@
 import {computed} from 'vue'
 import useLogout from '../composables/useLogout'
 import getUser from '../composables/getUser'
-import {projectFirestore, aUnion} from '../firebase/config'
+import {projectFirestore, aUnion, increment} from '../firebase/config'
 import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
 import {ref} from 'vue'
 import {useRoute} from 'vue-router'
@@ -33,24 +33,23 @@ export default {
     const { logout, error } = useLogout()
     const { user } = getUser()
     const isReady = ref(false)
-     let data = 
-     {[`${user.value.email}`]:
-      {cards:[],
-       totalPoints:0,
-       isReady: true
+    let id = `${user.value.email.split('@')[0]}`
+    console.log("EMAIL: " + id)
+     let data = {
+    
       }
-    }
+    
  const route = useRoute()
 
   const store = useStore()
   //const {gameId} = useGetters(['getGameId'])
 
-
   let gameId = route.params.id.toString()
-    //console.log(id)
-//let gameId = computed(() => store.state.gameId.toString())
+    
+//let {gameId} = computed(() => store.state.gameId)
+//console.log(gameId)
 
-    var docRef = projectFirestore.collection('games').doc(`${gameId}`);
+    var docRef = projectFirestore.collection('games').doc(gameId)
         
     const handleClick = async () => {
       await logout()
@@ -60,8 +59,18 @@ export default {
       isReady.value=true
       console.log(isReady)
 
-      await docRef.update({players: aUnion(data)})
+     // await docRef.update({players: aUnion(data)})
+     await docRef.update({[id]:
+      {cards:[],
+       totalPoints:0,
+     }})
 
+     addOne()
+
+    }
+
+    const addOne = async () => {
+      await docRef.update({playersJoined: increment})
     }
     return { handleClick, user, readyToPlay, isReady}
   }

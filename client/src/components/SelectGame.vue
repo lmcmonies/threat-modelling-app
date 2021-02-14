@@ -4,7 +4,7 @@
       <p>New Game</p>
       <input class="input" v-model="gameName" required placeholder="Enter Game Name" />
       <label class="label" for="players">Players:</label>
-      <select name="players" v-model="numOfPlayers" id="players" required>
+      <select name="players" v-model="totalPlayers" id="players" required>
        <option class="option" value="3">3</option>
        <option class ="option" value="4">4</option>
        <option class="option" value="5">5</option>
@@ -25,7 +25,7 @@
 <script>
 import {computed} from 'vue'
 import uuid from "uuid";
-import {projectFirestore, aUnion} from '../firebase/config'
+import {projectFirestore, aUnion, timestamp} from '../firebase/config'
 import {ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
@@ -35,7 +35,7 @@ export default {
 setup(){
  let gameName = ref("")
  let gameId =  ref("")
- let numOfPlayers = ref("")
+ let totalPlayers = ref("")
 
 
   const router = useRouter()
@@ -49,8 +49,8 @@ var docRef = projectFirestore.collection('games');
  const createGame = async () =>{
    let uid = uuid();
    let id = uid
-   let newGame = {gameName: `${gameName.value}`, gameId: `${uid}`, numOfPlayers: `${numOfPlayers.value}`, 
-   currentTurn: "", playZoneCardId: "", players: [] };
+   let newGame = {gameName: `${gameName.value}`, totalPlayers: parseInt(`${totalPlayers.value}`), 
+   currentTurn: "", playZoneCardId: "", playersJoined: 0, isGameActive: false, createdAt: timestamp() };
    updateGameId(id);
    await docRef.doc(id).set(newGame);
    router.push({name: 'chatroom', params:{id: id}})
@@ -60,7 +60,7 @@ const joinGame = async () =>{
    router.push({name: 'chatroom', params:{id: gameId.value.toString()}})
  }
 
-return {gameName, gameId, createGame, numOfPlayers, joinGame, updateGameId, gam}
+return {gameName, gameId, createGame, totalPlayers, joinGame, updateGameId, gam}
 }
 
 };

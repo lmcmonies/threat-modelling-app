@@ -12,7 +12,7 @@ const getCollection = (collection) => {
     //A document is added, changed, deleted
     //then user gets sent a snapshot.
     //Contains all docs and data at that moment in time
-    const unsub =  collectionRef.onSnapshot((snap) => {
+    collectionRef.onSnapshot((snap) => {
         console.log('snapshot')
         let results = []
         snap.docs.forEach(doc => {
@@ -24,6 +24,7 @@ const getCollection = (collection) => {
         })
 
         documents.value = results
+  
         error.value = null
     },  (err) => {
         console.log(err.message)
