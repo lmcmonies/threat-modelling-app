@@ -53,7 +53,12 @@ var docRef = projectFirestore.collection('games');
    currentTurn: "", playZoneCardId: "", playersJoined: 0, isGameActive: false, createdAt: timestamp() };
    updateGameId(id);
    await docRef.doc(id).set(newGame);
+   await createPlayersSubCollection(id)
    router.push({name: 'chatroom', params:{id: id}})
+ }
+
+ const createPlayersSubCollection = async (id) => {
+    docRef.doc(id).collection('players')
  }
 
 const joinGame = async () =>{

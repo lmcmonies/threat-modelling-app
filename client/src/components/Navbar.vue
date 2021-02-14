@@ -33,12 +33,13 @@ export default {
     const { logout, error } = useLogout()
     const { user } = getUser()
     const isReady = ref(false)
-    let id = `${user.value.email.split('@')[0]}`
-    console.log("EMAIL: " + id)
-     let data = {
-    
-      }
-    
+    //let id = `${user.value.email.split('@')[0]}`
+    let id = `${user.value.email}`
+     let data = 
+     {
+      email:id,
+      totalPoints:0,
+     }
  const route = useRoute()
 
   const store = useStore()
@@ -49,7 +50,9 @@ export default {
 //let {gameId} = computed(() => store.state.gameId)
 //console.log(gameId)
 
+    var subRef = projectFirestore.collection('games').doc(gameId).collection('players')
     var docRef = projectFirestore.collection('games').doc(gameId)
+
         
     const handleClick = async () => {
       await logout()
@@ -58,12 +61,13 @@ export default {
     const readyToPlay = async () =>{
       isReady.value=true
       console.log(isReady)
+      await subRef.add(data)
 
-     // await docRef.update({players: aUnion(data)})
-     await docRef.update({[id]:
-      {cards:[],
-       totalPoints:0,
-     }})
+     //await docRef.update({players: aUnion(data)})
+    //  await docRef.update({[id]:
+    //   {cards:[],
+    //    totalPoints:0,
+    //  }})
 
      addOne()
 

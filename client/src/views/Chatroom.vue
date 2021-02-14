@@ -35,7 +35,6 @@ export default {
     const {distributeCards} = useMutations(['distributeCards'])
 
     const  distribute = () => distributeCards()
-      // const  shuffle = () => shuffleCards()
    
     const router = useRouter()
     const { user } = getUser()

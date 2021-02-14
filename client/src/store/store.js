@@ -1,5 +1,7 @@
 
 import {createStore} from 'vuex'
+import getDocument from '../composables/getDocument'
+import {useRoute} from 'vue-router'
 
 
 export default createStore({
@@ -70,8 +72,7 @@ playZone: [],
     console.log('card: ', card.src)
     },
 
-    shuffleCards(state){
-    
+    shuffleCards(state){   
         //re orders allCardsArray
         for (let i = state.allCardsArray.length - 1; i > 0; i--) {
             const newIndex = Math.floor(Math.random() * (i + 1));
@@ -84,27 +85,32 @@ playZone: [],
         state.shuffledCardsArray = state.allCardsArray.map(a => ({...a}));
 
         state.shuffledCardsArray.forEach(function(card){
-            console.log(card.src)
+           // console.log(card.src)
         })
 
     },
 
-    distributeCards(state){
-     let totalPlayers = state.players.length 
-     let numOfCards = state.shuffledCardsArray.length 
-     let cardDistribution = numOfCards / totalPlayers
-     console.log("Total Players: " + totalPlayers)
-     console.log("Total Cards: " + numOfCards)
-     console.log("Card Distribution: " + cardDistribution)
+    distributeCards(state, totalPlayers){
+     //let totalPlayers = state.players.length 
+     let data = {
+      id: document.value.id
+    }
 
-    let min = 0
-    let max = cardDistribution
-    state.players.forEach(function(player){
-     player.cards = state.shuffledCardsArray.slice(min, max)
-     min += cardDistribution
-     max += cardDistribution
-     console.log(player.playerId, player.cards)
-    })
+    console.log("Store ID: " + data.id)
+    //  let numOfCards = state.shuffledCardsArray.length 
+    //  let cardDistribution = numOfCards / totalPlayers
+    // //  console.log("Total Players: " + totalPlayers)
+    // //  console.log("Total Cards: " + numOfCards)
+    // //  console.log("Card Distribution: " + cardDistribution)
+
+    // let min = 0
+    // let max = cardDistribution
+    // state.players.forEach(function(player){
+    //  player.cards = state.shuffledCardsArray.slice(min, max)
+    //  min += cardDistribution
+    //  max += cardDistribution
+    //  //console.log(player.playerId, player.cards)
+    // })
 },
   },
   actions: {
