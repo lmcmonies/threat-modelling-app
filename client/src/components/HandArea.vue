@@ -24,6 +24,7 @@ import getDocument from '../composables/getDocument'
 import getSubCollection from '../composables/getSubCollection'
 import { computed, onUpdated, ref, watch } from 'vue'
 import {projectFirestore, aUnion, timestamp} from '../firebase/config'
+import {formatDistanceToNow} from 'date-fns'
 
 export default {
     setup(){
@@ -41,44 +42,56 @@ export default {
   //const {shuffledCardsArray} = useGetters(['shuffledCard'])
 
   let documentId = route.params.id.toString()
+  console.log(documentId)
   let collection = 'games'
   let subCollection = 'players'
 
   const { documents, error} =  getSubCollection(collection, documentId, subCollection)
   const { document, err} =  getDocument(collection, documentId)
 
-  // let getPlayerIds = () => {
-  //       let playerIds = []
-  //      for (let doc in documents){
-  //        let data={
-  //        id: doc.id
-  //        }
-  //        playerIds.push(data)
-  //        console.log("DATA: "+ data.id)
-  //      }
-
-  //     for(let id in playerIds){
-  //       console.log("Player Id: "+id.id)
+  // let showResult = () =>{
+  //       let data = {
+  //         playersJoined: document.value.playersJoined
+  //       }
+  //   console.log("Players Joined:"+ data.playersJoined)
   //     }
 
-  //      return playerIds
-  //    }
-    for (let doc in documents){
-      let data = {
-       id: doc.id,
-       email: doc.email,
-       totalPoints: doc.totalPoints
-     }
-    console.log("DOCUMENTS" + data)
-    }
-    
+  //     showResult()
+
+  let getPlayerIds = () => {
+        let playerIds = []
+        // let objects = {
+        //   obj1: documents.value[0],
+        //   obj2: documents.value[1],
+        //   obj3:documents.value[2]
+        // }
+       //let docs = documents
+        //console.log(objects.obj1)
+
+      
+
+        //  for(let doc in documents){
+        //    console.log(documents[doc])
+        //  }
+              
+          
+       
+        
+      //  for (let doc in docs){
+      //    console.log(docs)
+        //   for(let i=0; i < 3; i++){
+        //     console.log("Length: " + doc.length)
+        //     playerIds.push(documents[doc][i].id)
+        //     console.log("IDS: " + documents[doc][i].id)
+        //  }
+         return playerIds
+     
+  }
+
+  getPlayerIds()
+  
     
      let distributeCards = async () => {
-  
-  
-    
-     
-      // playerIds.forEach(player => {console.log("Player Id:" + player.id)})
       
       console.log("DISTRIBUTING CARDS")
        shuffledCards.value.forEach(card => {console.log(card.id)})
@@ -86,12 +99,12 @@ export default {
      let docData = {totalPlayers:document.value.totalPlayers}
 
      let totalPlayers = docData.totalPlayers
-     console.log("Total Players: " + totalPlayers)
+    // console.log("Total Players: " + totalPlayers)
      let numOfCards =  shuffledCards.value.length
-     console.log("Shuffled Cards Length: "+ shuffledCards.value.length)
+     //console.log("Shuffled Cards Length: "+ shuffledCards.value.length)
 
      let cardDistribution = numOfCards / totalPlayers
-     console.log("Card Distribution: " + cardDistribution)
+     //console.log("Card Distribution: " + cardDistribution)
      let min = 0
      let max = cardDistribution
     
@@ -99,57 +112,35 @@ export default {
         let cardIds = []
          console.log("Min: " + min)
           console.log("Max: " + max)
-      for(let i = min; i<max; i++){
+      
+      for(let i = min; i<max; i++)
+      {
        console.log("Card ID: " + shuffledCards.value[i].id)
-      cardIds.push(shuffledCards.value[i])
+       cardIds.push(shuffledCards.value[i])
       }
+
        min += cardDistribution
        max += cardDistribution
        return cardIds
-    }
+    } 
 
-    //  //for(let doc in documents){
-    //   for (let x=0; x < cardDistribution; x++){
-    //     let cardIds = cardGenerator()
-    //    // for(let doc in documents){
-    //      subRef.doc(doc.id).collection('cards').add(cardIds[x])
-    //     //}
-    //     }
-    //    }
-
-      
-       
-    
-      //}
-    
-    //  console.log("CARD IDS Length: " +  cardIds.length)
-     
-    //  cardIds.forEach(card => {
-    //    console.log(card.id)
-    //  })
-
-    //  for (let i=0; i < docData; i++){
-        
-    //     console.log(cardIds.value.length)
-    //     console.log("HEY")
-    //     min += cardDistribution
-    //     max += cardDistribution
-    //     for (let x=0; x < cardIds.length; x++){
-    //      subRef.doc(documents[i]).update({cards: cardIds[x].value.id})
-    //      console.log("Card ID:" + cardIds[x].value.id)
-    //   }
-    //   }
-     }
+   //for (let i=0; i < cardDistribution; i++){
+        let cardIds = cardGenerator()
+         for (let x=0; x < cardDistribution; x++){
+         subRef.doc('mO3ght1muEI9CzWo1kGZ').collection('cards').add(cardIds[x])
+        }
+    // }
+  }
 
       watch(document, async () => {
        let data = {
           playersJoined: document.value.playersJoined,
           totalPlayers: document.value.totalPlayers
         }
-     // if(data.playersJoined === data.totalPlayers) {
+      //if(data.playersJoined === data.totalPlayers) {
       shuffleCards()
      await distributeCards()
-   // }
+     // }
     });
 
     

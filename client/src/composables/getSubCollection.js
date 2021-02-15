@@ -1,4 +1,4 @@
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, reactive } from 'vue'
 import { projectFirestore } from '../firebase/config'
 
 const getSubCollection = (collection, documentId, subCollection) => {
@@ -19,17 +19,26 @@ const getSubCollection = (collection, documentId, subCollection) => {
             //doc.data().createdAt - required, otherwise user recieves 
             //local version of snap using local createdAt. Meaning, 
             // user recieves not fully created snapshot. 
-            results.push({...doc.data(), id:doc.id})
-          console.log(doc.data())
-          for (let i=0; i<results.length; i++){
-            console.log("EMAIL: " + results[i].id)
-        }
+         results.push({...doc.data(), id:doc.id})
+        //   console.log(doc.data())
+        //   for (let i=0; i<results.length; i++){
+        //     console.log("EMAIL: " + results[i].email)
+        // }
           
         })
        
 
         documents.value = results
 
+
+    //  for (let doc in documents){
+    //      //console.log(documents)
+    //     for(let i=0; i <documents[doc].length; i++){
+    //         console.log("SUBDOC: " + documents[doc][i].id)
+    //     }
+    //}
+        
+       
         error.value = null
     },  (err) => {
         console.log(err.message)

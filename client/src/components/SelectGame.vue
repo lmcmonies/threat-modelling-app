@@ -25,7 +25,7 @@
 <script>
 import {computed} from 'vue'
 import uuid from "uuid";
-import {projectFirestore, aUnion, timestamp} from '../firebase/config'
+import {projectFirestore, timestamp} from '../firebase/config'
 import {ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
