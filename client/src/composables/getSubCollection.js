@@ -1,11 +1,11 @@
 import { ref, watchEffect, reactive } from 'vue'
 import { projectFirestore } from '../firebase/config'
 
-const getSubCollection = (collection, documentId, subCollection) => {
-    const documents = ref(null)
-    const error = ref(null)
+const getSubCollection = (gamesCollection, gameDocumentId, playersCollection) => {
+    const players = ref(null)
+    const playersError = ref(null)
 
-    let collectionRef = projectFirestore.collection(collection).doc(documentId).collection(subCollection)
+    let collectionRef = projectFirestore.collection(gamesCollection).doc(gameDocumentId).collection(playersCollection)
     
     // onSnapshot() - real time listener for DB
     //A document is added, changed, deleted
@@ -28,23 +28,23 @@ const getSubCollection = (collection, documentId, subCollection) => {
         })
        
 
-        documents.value = results
+        players.value = results
 
 
-    //for (let doc in documents){
+    //for (let doc in playersCollection){
          //console.log(doc)
-        //  console.log(documents)
-        // for(let i=0; i <documents['value'].length; i++){
-        //    console.log("SUBDOC: " + documents['value'][i].id)
+        //  console.log(playersCollection)
+        // for(let i=0; i <playersCollection['value'].length; i++){
+        //    console.log("SUBDOC: " + playersCollection['value'][i].id)
         // }
   //}
         
        
-        error.value = null
+        playersError.value = null
     },  (err) => {
         console.log(err.message)
-        documents.value = null
-        error.value = 'could not fetch data'
+        players.value = null
+        playersError.value = 'could not fetch data'
     })
 
     //executes when component it's being used in unmounts
@@ -53,7 +53,7 @@ const getSubCollection = (collection, documentId, subCollection) => {
     //   onInvalidate(() => unsub())
     // })
 
-    return { documents, error }
+    return { players, playersError }
     
 }
 

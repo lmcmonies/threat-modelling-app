@@ -5,10 +5,10 @@
            
       </div> -->
       <!-- <button class="button" @click="showResult">Show Result</button>  -->
-        <!-- <div v-for="card in cards" v-bind:key="card.id">
+        <div v-for="card in playersCards" v-bind:key="card.id">
            <figure><img class="card" :src="card.src" @click="updatePlayZone(card)"/></figure>
-        </div>  -->
-      <!-- <div v-for="doc in documents" :key="doc.id" class="single">
+        </div> 
+      <!-- <div v-for="doc in players" :key="doc.id" class="single">
             <span class="playersJoined">{{doc.id}}</span>
             <span class="totalPLayers">{{doc}}</span> 
         </div>  -->
@@ -34,51 +34,46 @@ export default {
 
   const route = useRoute()
     let shuffledCards = computed(() => store.state.shuffledCardsArray)
+    let playersCards = computed(() => store.state.playersCards)
+    //let playerId = computed(() => store.state.playerId)
+    
   
-  let gameId = route.params.id.toString()
-
-  var subRef = projectFirestore.collection('games').doc(gameId).collection('players')
-
+  
 
   const store = useStore()
   const {shuffleCards} = useMutations(['shuffleCards'])
-  //const {shuffledCardsArray} = useGetters(['shuffledCard'])
+  const {updatePlayersCards} = useActions(['updatePlayersCards'])
+  const {updatePlayerId} = useActions(['updatePlayerId'])
+  const {getPlayerId} = useGetters(['getPlayerId'])
 
-  let documentId = route.params.id.toString()
-  let collection = 'games'
-  let subCollection = 'players'
-  let subSubCollection = 'cards'
-  let subDocId = 'BGkOMBnDxGhlKKb5miqE'
+  //let gameId = route.params.id.toString()
+  let gamesCollection = 'games'
+  let playersCollection = 'players'
+  let cardsCollection = 'cards'
+  let playerId = 'm1XfnogzeTXzOLMhKYQ2'
+  let gameId = route.params.id.toString()
 
-  const { document, err} =  getDocument(collection, documentId)
-  const { documents, error} =  getSubCollection(collection, documentId, subCollection)
-  const { cards, cardserror} =  getSubSubCollection(collection, documentId, subCollection, subDocId,subSubCollection )
+  var subRef = projectFirestore.collection(gamesCollection).doc(gameId).collection(playersCollection)
 
-console.log(cards)
-let players = []
 
-  watch(documents, async () => {
-        let playerIds = []
-    for(let i=0; i < documents.value.length; i++){
-      if(playerIds[i] !== documents.value[i].id){
-      playerIds.push(documents.value[i].id)
-      }
-    }
-    console.log(playerIds)
-    if(playerIds.length === document.value.totalPlayers){
-     for(let x=0; x< playerIds.length; x++){
-       players.push(playerIds[x])
-       console.log(players[x])
-     }
-    }
-  })
+
+
+  const { gameDocument, gameDocumentError} =  getDocument(gamesCollection, gameId)
+  const { players, playersError} =  getSubCollection(gamesCollection, gameId, playersCollection)
+  const { cards, cardsError} =  getSubSubCollection(gamesCollection, gameId, playersCollection, playerId, cardsCollection )
+
+
+
+let playersArray = []
+
+  
 
  let distributeCards = async () => {
       
       //console.log("DISTRIBUTING CARDS")
       // shuffledCards.value.forEach(card => {console.log(card.id)})
 
-     let docData = {totalPlayers:document.value.totalPlayers}
+     let docData = {totalPlayers:gameDocument.value.totalPlayers}
 
      let totalPlayers = docData.totalPlayers
     // console.log("Total Players: " + totalPlayers)
@@ -111,17 +106,17 @@ let players = []
    for (let i=0; i < players.length; i++){
         let cardIds = cardGenerator()
          for (let x=0; x < cardDistribution; x++){
-         //subRef.doc(players[i]).collection('cards').add(cardIds[x])
+         //subRef.doc(players[i]).gamesCollection('cards').add(cardIds[x])
         }
      }
  }
 
-  watch(document, async () => {
+  watch(gameDocument, async () => {
  
        let data = {
-          playersJoined: document.value.playersJoined,
-          totalPlayers: document.value.totalPlayers,
-          gameActive: document.value.isGameActive
+          playersJoined: gameDocument.value.playersJoined,
+          totalPlayers: gameDocument.value.totalPlayers,
+          gameActive: gameDocument.value.isGameActive
         }
      if(data.playersJoined === data.totalPlayers){
       if(!data.gameActive){
@@ -131,19 +126,41 @@ let players = []
      }
     });
 
+    watch(players, async () => {
+        let playerIds = []
+
+    for(let i=0; i < players.value.length; i++){
+      if(playerIds[i] !== players.value[i].id){
+      playerIds.push(players.value[i])
+      }
+    }
+
+    if(playerIds.length === gameDocument.value.totalPlayers){
+     for(let x=0; x< playerIds.length; x++){
+       playersArray.push(playerIds[x].id)
+       ///console.log("Players" + players[x])
+        
+       if(playerIds[x].email === user.value.email){
+        updatePlayerId(playerIds[x].id)
+       }  
+     }
+    }
+  })
+
+
+
+
+
+
 watch(cards, async () => {
-  console.log(cards)
   let cardsArray = await retrieveCards()
-  for(let x=0; x < cardsArray.length; x++){
-    console.log(cardsArray[x].cardId)
-    console.log(cardsArray[x].src)
-  }
+  updatePlayersCards(cardsArray)
 })
 
     let retrieveCards = async () => {
       let cardsArray = []
-      for(let i=0; i < documents.value.length; i++){
-      if(user.value.email === documents.value[i].email){
+      for(let i=0; i < players.value.length; i++){
+      if(user.value.email === players.value[i].email){
         for(let x=0; x < cards.value.length; x++){
           cardsArray.push(cards.value[x])
         }
@@ -152,8 +169,7 @@ watch(cards, async () => {
     return cardsArray
 
     }
-
-    return {document, documents, error, err, cards, cardserror}
+    return {gameDocument, players, playersError, gameDocumentError, cards, cardsError, playersCards}
             
     
     }
@@ -163,7 +179,7 @@ watch(cards, async () => {
 <style scoped>
 .hand-area{
 
-  height:50%;   
+  height:100%;   
   width: 90%;
   font-family: 'Trebuchet MS';
   background-position: bottom;
@@ -174,11 +190,11 @@ watch(cards, async () => {
   display: block;
   overflow: auto;
   padding-bottom: 10px;
-  position: relative;
+  /* position: relative;
     top: 50%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
 
     
 }

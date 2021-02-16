@@ -7,6 +7,10 @@ import {useRoute} from 'vue-router'
 export default createStore({
   state: {
     gameId: '',
+    shuffledCardsArray: [],
+    playersCards: [],
+    playerId:'',
+    playZone: [],
     allCardsArray: 
     [
       {cardId: 1, src: require('../assets/EoPCards/Suits/DenialofService/2DenialofService.png')},
@@ -26,7 +30,7 @@ export default createStore({
       {cardId: 15, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/6ElevationofPrivilege.png')},
       {cardId: 16, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/7ElevationofPrivilege.png')}
     ],
-    shuffledCardsArray: [],
+    
 
     players: [{
         playerId: 1,
@@ -49,16 +53,28 @@ export default createStore({
         cards: [],
     }],
 
-playZone: [],
-
   },
   getters: {
     shuffledCard(state){return state.shuffledCardsArray},
     playersCards(state){ return state.players[0].cards},
     playZoneCard(state){return state.playZone},
-    getGameId(state){return state.gameId}
+    getGameId(state){return state.gameId},
+    getPlayerId(state){return state.playerId}
   },
   mutations: {
+
+    updatePlayerId(state, playerId){
+     state.playerId = playerId
+     console.log("PLAYERID: " + state.playerId)
+    },
+
+    updatePlayersCards(state, cards){
+    for(let x=0; x < cards.length; x++){
+      state.playersCards.push(cards[x])
+      console.log(cards[x].id)
+    }
+    },
+
     updateGameId(state, id){
     state.gameId = id
     console.log(id)
@@ -120,6 +136,12 @@ playZone: [],
 
   updateGameId({commit}, id ){
     commit('updateGameId', id)
+  },
+  updatePlayersCards({commit}, cards){
+    commit('updatePlayersCards', cards)
+  },
+  updatePlayerId({commit}, playerId){
+    commit('updatePlayerId', playerId)
   }
       
     
