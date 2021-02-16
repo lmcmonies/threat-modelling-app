@@ -5,9 +5,9 @@
            
       </div> -->
       <!-- <button class="button" @click="showResult">Show Result</button>  -->
-        <!-- <div v-for="card in cards" v-bind:key="card.id">
+        <div v-for="card in cards" v-bind:key="card.id">
            <figure><img class="card" :src="card.src" @click="updatePlayZone(card)"/></figure>
-        </div>  -->
+        </div> 
       <!-- <div v-for="doc in documents" :key="doc.id" class="single">
             <span class="playersJoined">{{doc.id}}</span>
             <span class="totalPLayers">{{doc}}</span> 
@@ -48,13 +48,13 @@ export default {
   let collection = 'games'
   let subCollection = 'players'
   let subSubCollection = 'cards'
-  let subDocId = 'BGkOMBnDxGhlKKb5miqE'
+  let subDocId = '7s8rBXYzX8sPsnJIv5gA'
 
   const { document, err} =  getDocument(collection, documentId)
   const { documents, error} =  getSubCollection(collection, documentId, subCollection)
-  const { cards, cardserror} =  getSubSubCollection(collection, documentId, subCollection, subDocId,subSubCollection )
+  const { cards, cardsError} =  getSubSubCollection(collection, documentId, subCollection, subDocId,subSubCollection )
 
-console.log(cards)
+
 let players = []
 
   watch(documents, async () => {
@@ -73,7 +73,7 @@ let players = []
     }
   })
 
- let distributeCards = async () => {
+ let distributeCards = () => {
       
       //console.log("DISTRIBUTING CARDS")
       // shuffledCards.value.forEach(card => {console.log(card.id)})
@@ -111,7 +111,7 @@ let players = []
    for (let i=0; i < players.length; i++){
         let cardIds = cardGenerator()
          for (let x=0; x < cardDistribution; x++){
-         //subRef.doc(players[i]).collection('cards').add(cardIds[x])
+          //subRef.doc(players[i]).collection('cards').add(cardIds[x])
         }
      }
  }
@@ -126,26 +126,27 @@ let players = []
      if(data.playersJoined === data.totalPlayers){
       if(!data.gameActive){
       shuffleCards()
-     await distributeCards()
+      distributeCards()
        }
      }
     });
 
 watch(cards, async () => {
-  console.log(cards)
-  let cardsArray = await retrieveCards()
+  console.log("CARDS" + cards)
+  let cardsArray =  retrieveCards()
   for(let x=0; x < cardsArray.length; x++){
-    console.log(cardsArray[x].cardId)
-    console.log(cardsArray[x].src)
+    console.log("CardID" + cardsArray[x].id)
+    console.log("CARD SRC: " + cardsArray[x].src)
   }
 })
 
-    let retrieveCards = async () => {
+    let retrieveCards = () => {
       let cardsArray = []
       for(let i=0; i < documents.value.length; i++){
       if(user.value.email === documents.value[i].email){
         for(let x=0; x < cards.value.length; x++){
           cardsArray.push(cards.value[x])
+          console.log(cards.value[x].id)
         }
       }
     }
@@ -153,7 +154,7 @@ watch(cards, async () => {
 
     }
 
-    return {document, documents, error, err, cards, cardserror}
+    return {document, documents, error, err, cards, cardsError}
             
     
     }
