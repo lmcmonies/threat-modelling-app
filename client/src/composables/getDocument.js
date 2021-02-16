@@ -2,33 +2,33 @@ import { ref } from 'vue'
 import { projectFirestore } from '../firebase/config'
 
 
-const getDocument = (gamesCollection, gameDocumentId) => {
-    const gameDocument = ref(null)
+const getDocument = (collection, documentId) => {
+    const document = ref(null)
     const error = ref(null)
 
-    let documentRef = projectFirestore.collection(gamesCollection).doc(gameDocumentId)
+    let documentRef = projectFirestore.collection(collection).doc(documentId)
     
     // onSnapshot() - real time listener for DB
-    //A gameDocument is added, changed, deleted
+    //A document is added, changed, deleted
     //then user gets sent a snapshot.
     //Contains all docs and data at that moment in time
         documentRef.onSnapshot((snap) => {
          let result = {}
          result = snap.data().createdAt && {...snap.data(), id:snap.id}
-         gameDocument.value = result
+         document.value = result
          error.value = null,
 
         (err) => {
         console.log(err.message)
-        gameDocument.value = null
+        document.value = null
         error.value = 'could not fetch data'
         }})
     //executes when component it's being used in unmounts
-    //unsub from prev gamesCollection when watcher is stopped
+    //unsub from prev collection when watcher is stopped
     // watchEffect((onInvalidate) => {
     //   onInvalidate(() => unsub())
     // })
 
-    return { gameDocument, error }
+    return { document, error }
 }
 export default getDocument

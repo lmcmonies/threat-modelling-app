@@ -5,12 +5,12 @@
     <div>
       <p>Playing as {{ user.displayName }}</p>
     
-         <button class="button" @click="handleClick">Logout</button>
+
     </div>
      <div class="title-container">
       <h1>Elevation of Privilege</h1>
      
-     
+         <button class="button" @click="handleClick">Logout</button>
       </div>
     
       
@@ -111,7 +111,7 @@ export default {
   background-color: white; 
   color: black; 
   border: 2px solid #4CAF50;
-  width: 60%;
+  width: 10%;
   padding: 14px 20px;
   margin: 8px 0;
   cursor: pointer;

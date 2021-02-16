@@ -1,11 +1,11 @@
 import { ref, watchEffect, reactive } from 'vue'
 import { projectFirestore } from '../firebase/config'
 
-const getSubSubCollection = (gamesCollection, gameId, playersCollection, playersId, cardsCollection ) => {
+const getSubSubCollection = (collection, documentId, subCollection, subDocId, subSubCollection ) => {
     const cards = ref(null)
-    const cardsError = ref(null)
+    const cardserror = ref(null)
 
-    let collectionRef = projectFirestore.collection(gamesCollection).doc(gameId).collection(playersCollection).doc(playersId).collection(cardsCollection)
+    let collectionRef = projectFirestore.collection(collection).doc(documentId).collection(subCollection).doc(subDocId).collection(subSubCollection)
     
     // onSnapshot() - real time listener for DB
     //A document is added, changed, deleted
@@ -40,11 +40,11 @@ const getSubSubCollection = (gamesCollection, gameId, playersCollection, players
 //  }
         
        
-        cardsError.value = null
+        cardserror.value = null
     },  (err) => {
         console.log(err.message)
         cards.value = null
-        cardsError.value = 'could not fetch data'
+        cardserror.value = 'could not fetch data'
     })
 
     //executes when component it's being used in unmounts
@@ -53,7 +53,7 @@ const getSubSubCollection = (gamesCollection, gameId, playersCollection, players
     //   onInvalidate(() => unsub())
     // })
 
-    return { cards, cardsError }
+    return { cards, cardserror }
     
 }
 
