@@ -8,10 +8,10 @@
         <!-- <div v-for="card in cards" v-bind:key="card.id">
            <figure><img class="card" :src="card.src" @click="updatePlayZone(card)"/></figure>
         </div>  -->
-      <div v-for="doc in documents" :key="doc.id" class="single">
+      <!-- <div v-for="doc in documents" :key="doc.id" class="single">
             <span class="playersJoined">{{doc.id}}</span>
-            <!-- <span class="totalPLayers">{{doc}}</span> -->
-        </div> 
+            <span class="totalPLayers">{{doc}}</span> 
+        </div>  -->
   
   </div>
 </template>
@@ -20,14 +20,17 @@
 import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
 import {useStore} from 'vuex'
 import {useRoute} from 'vue-router'
+import getUser from '../composables/getUser'
 import getDocument from '../composables/getDocument'
 import getSubCollection from '../composables/getSubCollection'
+import getSubSubCollection from '../composables/getSubSubCollection'
 import { computed, onUpdated, ref, watch } from 'vue'
 import {projectFirestore, aUnion, timestamp} from '../firebase/config'
 import {formatDistanceToNow} from 'date-fns'
 
 export default {
     setup(){
+       const { user } = getUser()
 
   const route = useRoute()
     let shuffledCards = computed(() => store.state.shuffledCardsArray)
@@ -44,10 +47,14 @@ export default {
   let documentId = route.params.id.toString()
   let collection = 'games'
   let subCollection = 'players'
+  let subSubCollection = 'cards'
+  let subDocId = 'BGkOMBnDxGhlKKb5miqE'
 
-  const { documents, error} =  getSubCollection(collection, documentId, subCollection)
   const { document, err} =  getDocument(collection, documentId)
+  const { documents, error} =  getSubCollection(collection, documentId, subCollection)
+  const { cards, cardserror} =  getSubSubCollection(collection, documentId, subCollection, subDocId,subSubCollection )
 
+console.log(cards)
 let players = []
 
   watch(documents, async () => {
@@ -104,16 +111,10 @@ let players = []
    for (let i=0; i < players.length; i++){
         let cardIds = cardGenerator()
          for (let x=0; x < cardDistribution; x++){
-         subRef.doc(players[i]).collection('cards').add(cardIds[x])
+         //subRef.doc(players[i]).collection('cards').add(cardIds[x])
         }
      }
-    
-
  }
-
-
-
-
 
   watch(document, async () => {
  
@@ -129,8 +130,32 @@ let players = []
        }
      }
     });
-    return {document, documents, error, err}
+
+watch(cards, async () => {
+  console.log(cards)
+  let cardsArray = await retrieveCards()
+  for(let x=0; x < cardsArray.length; x++){
+    console.log(cardsArray[x].cardId)
+    console.log(cardsArray[x].src)
+  }
+})
+
+    let retrieveCards = async () => {
+      let cardsArray = []
+      for(let i=0; i < documents.value.length; i++){
+      if(user.value.email === documents.value[i].email){
+        for(let x=0; x < cards.value.length; x++){
+          cardsArray.push(cards.value[x])
+        }
+      }
+    }
+    return cardsArray
+
+    }
+
+    return {document, documents, error, err, cards, cardserror}
             
+    
     }
 }
 </script>

@@ -9,13 +9,15 @@
     </div>
      <div class="title-container">
       <h1>Elevation of Privilege</h1>
+     
          <button class="button" @click="handleClick">Logout</button>
-    
       </div>
-      
-  
-     <button  v-on:click="isReady=!isReady" v-bind:class="{isReady: isReady}" @click="readyToPlay">Ready To Play?</button>
     
+      
+      
+   <div v-if="!isReady">
+     <button  v-on:click="isReady=!isReady" v-bind:class="{isReady: isReady}" @click="readyToPlay">Ready To Play?</button>
+    </div>
   </nav>
 </template>
 
@@ -39,6 +41,7 @@ export default {
      {
       email:id,
       totalPoints:0,
+      ready: true
      }
  const route = useRoute()
 
@@ -60,7 +63,7 @@ export default {
 
     const readyToPlay = async () =>{
       isReady.value=true
-      console.log(isReady)
+      //console.log(isReady)
       await subRef.add(data)
 
      //await docRef.update({players: aUnion(data)})
