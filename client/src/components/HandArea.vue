@@ -9,8 +9,8 @@
            <figure><img class="card" :src="card.src" @click="updatePlayZone(card)"/></figure>
         </div>  -->
       <div v-for="doc in documents" :key="doc.id" class="single">
-            <span class="playersJoined">{{doc.email}}</span>
-            <span class="totalPLayers">{{doc.id}}</span>
+            <span class="playersJoined">{{doc.id}}</span>
+            <!-- <span class="totalPLayers">{{doc}}</span> -->
         </div> 
   
   </div>
@@ -42,59 +42,34 @@ export default {
   //const {shuffledCardsArray} = useGetters(['shuffledCard'])
 
   let documentId = route.params.id.toString()
-  console.log(documentId)
   let collection = 'games'
   let subCollection = 'players'
 
   const { documents, error} =  getSubCollection(collection, documentId, subCollection)
   const { document, err} =  getDocument(collection, documentId)
 
-  // let showResult = () =>{
-  //       let data = {
-  //         playersJoined: document.value.playersJoined
-  //       }
-  //   console.log("Players Joined:"+ data.playersJoined)
-  //     }
+let players = []
 
-  //     showResult()
-
-  let getPlayerIds = () => {
+  watch(documents, async () => {
         let playerIds = []
-        // let objects = {
-        //   obj1: documents.value[0],
-        //   obj2: documents.value[1],
-        //   obj3:documents.value[2]
-        // }
-       //let docs = documents
-        //console.log(objects.obj1)
+    for(let i=0; i < documents.value.length; i++){
+      if(playerIds[i] !== documents.value[i].id){
+      playerIds.push(documents.value[i].id)
+      }
+    }
+    console.log(playerIds)
+    if(playerIds.length === document.value.totalPlayers){
+     for(let x=0; x< playerIds.length; x++){
+       players.push(playerIds[x])
+       console.log(players[x])
+     }
+    }
+  })
 
+ let distributeCards = async () => {
       
-
-        //  for(let doc in documents){
-        //    console.log(documents[doc])
-        //  }
-              
-          
-       
-        
-      //  for (let doc in docs){
-      //    console.log(docs)
-        //   for(let i=0; i < 3; i++){
-        //     console.log("Length: " + doc.length)
-        //     playerIds.push(documents[doc][i].id)
-        //     console.log("IDS: " + documents[doc][i].id)
-        //  }
-         return playerIds
-     
-  }
-
-  getPlayerIds()
-  
-    
-     let distributeCards = async () => {
-      
-      console.log("DISTRIBUTING CARDS")
-       shuffledCards.value.forEach(card => {console.log(card.id)})
+      //console.log("DISTRIBUTING CARDS")
+      // shuffledCards.value.forEach(card => {console.log(card.id)})
 
      let docData = {totalPlayers:document.value.totalPlayers}
 
@@ -105,17 +80,18 @@ export default {
 
      let cardDistribution = numOfCards / totalPlayers
      //console.log("Card Distribution: " + cardDistribution)
-     let min = 0
+
+      let min = 0
      let max = cardDistribution
     
     let cardGenerator = () => {
         let cardIds = []
-         console.log("Min: " + min)
-          console.log("Max: " + max)
+         //console.log("Min: " + min)
+          //console.log("Max: " + max)
       
       for(let i = min; i<max; i++)
       {
-       console.log("Card ID: " + shuffledCards.value[i].id)
+      // console.log("Card ID: " + shuffledCards.value[i].id)
        cardIds.push(shuffledCards.value[i])
       }
 
@@ -124,28 +100,35 @@ export default {
        return cardIds
     } 
 
-   //for (let i=0; i < cardDistribution; i++){
+
+   for (let i=0; i < players.length; i++){
         let cardIds = cardGenerator()
          for (let x=0; x < cardDistribution; x++){
-         subRef.doc('mO3ght1muEI9CzWo1kGZ').collection('cards').add(cardIds[x])
+         subRef.doc(players[i]).collection('cards').add(cardIds[x])
         }
-    // }
-  }
+     }
+    
 
-      watch(document, async () => {
+ }
+
+
+
+
+
+  watch(document, async () => {
+ 
        let data = {
           playersJoined: document.value.playersJoined,
-          totalPlayers: document.value.totalPlayers
+          totalPlayers: document.value.totalPlayers,
+          gameActive: document.value.isGameActive
         }
-      //if(data.playersJoined === data.totalPlayers) {
+     if(data.playersJoined === data.totalPlayers){
+      if(!data.gameActive){
       shuffleCards()
      await distributeCards()
-     // }
+       }
+     }
     });
-
-    
-     
-
     return {document, documents, error, err}
             
     }

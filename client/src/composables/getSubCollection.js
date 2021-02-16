@@ -31,12 +31,13 @@ const getSubCollection = (collection, documentId, subCollection) => {
         documents.value = results
 
 
-    //  for (let doc in documents){
-    //      //console.log(documents)
-    //     for(let i=0; i <documents[doc].length; i++){
-    //         console.log("SUBDOC: " + documents[doc][i].id)
-    //     }
-    //}
+    //for (let doc in documents){
+         //console.log(doc)
+        //  console.log(documents)
+        // for(let i=0; i <documents['value'].length; i++){
+        //    console.log("SUBDOC: " + documents['value'][i].id)
+        // }
+  //}
         
        
         error.value = null
