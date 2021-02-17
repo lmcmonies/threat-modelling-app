@@ -48,7 +48,7 @@ export default {
   let collection = 'games'
   let subCollection = 'players'
   let subSubCollection = 'cards'
-  let subDocId = '7s8rBXYzX8sPsnJIv5gA'
+  let subDocId = '5iZCA7xLCYLERcEdlUOK'
 
   const { document, err} =  getDocument(collection, documentId)
   const { documents, error} =  getSubCollection(collection, documentId, subCollection)
@@ -111,7 +111,7 @@ let players = []
    for (let i=0; i < players.length; i++){
         let cardIds = cardGenerator()
          for (let x=0; x < cardDistribution; x++){
-          //subRef.doc(players[i]).collection('cards').add(cardIds[x])
+          subRef.doc(players[i]).collection('cards').add(cardIds[x])
         }
      }
  }
