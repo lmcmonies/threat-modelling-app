@@ -7,14 +7,12 @@
       <!-- <button class="button" @click="showResult">Show Result</button>  -->
         <div v-for="card in pCards" v-bind:key="card.id">
            <figure><img class="card" :src="card.src" @click="updatePlayZone(card)"/></figure>
-           {{card.id}}
+
         </div> 
       <!-- <div v-for="doc in documents" :key="doc.id" class="single">
             <span class="playersJoined">{{doc.id}}</span>
             <span class="totalPLayers">{{doc}}</span> 
         </div>  -->
-
-  
   </div>
 </template>
 
@@ -63,7 +61,7 @@ export default {
   //players
   const { documents, error} =  getSubCollection(collection, documentId, subCollection)
 
-  const {pCards, cardsError} = setTimeout(async () =>{ 
+  const {cards, cardsError} = setTimeout(async () =>{ 
       let pid = computed(() => store.state.playerId ) 
        console.log("RETRIEVING PID: " + pid.value)
        const {cards, cardsError} = await getSubSubCollection(collection, documentId, subCollection, pid.value,subSubCollection ) 
@@ -76,16 +74,17 @@ export default {
        }
        updatePlayersCards(playersCards)
        })
-         let pCards = computed(() => store.state.playersCards)
-         watch(pCards, async () => {
-         for(let i=0; i< 4; i++){
+         //let pCards = computed(() => store.state.playersCards)
+      //    watch(pCards, async () => {
+      //    for(let i=0; i< 4; i++){
       
-         console.log("PCARD: " + pCards.value[i].id)
-       }
-       })
-       return {pCards, cardsError}
+      //    console.log("PCARD: " + pCards.value[i].id)
+      //  }
+      //  })
+       return {cards, cardsError}
 }, 300)
 
+ let pCards = computed(() => store.state.playersCards)
 
 let players = []
 
