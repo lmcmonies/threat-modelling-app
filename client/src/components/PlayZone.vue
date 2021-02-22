@@ -1,18 +1,22 @@
 <template>
   <div class='play-zone'>
 
-    <div v-for="card in playZoneCard" v-bind:key="card.id">
+    <!-- <div v-for="card in playZoneCard" v-bind:key="card.id">
             <figure><img class="card" :src="card.src"/></figure>
-        </div> 
+        </div>  -->
+    
 
   </div>
 </template>
 
 <script>
 import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
+import { computed, onUpdated, ref, watch } from 'vue'
 export default {
 setup(){
    const {playZoneCard} = useGetters(['playZoneCard'])
+  
+   
 
    return{playZoneCard}
 }

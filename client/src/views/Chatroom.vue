@@ -40,6 +40,7 @@ export default {
     const { user } = getUser()
 
      const route = useRoute()
+     
 
   let document = route.params.id.toString()
   let collection = 'games'

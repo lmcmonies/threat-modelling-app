@@ -1,11 +1,12 @@
 import { ref, watchEffect, reactive } from 'vue'
 import { projectFirestore } from '../firebase/config'
 
-const getSubSubCollection = (collection, documentId, subCollection, subDocId, subSubCollection ) => {
+const getSubSubCollection = async (collection, documentId, subCollection, subDocId, subSubCollection ) => {
     const cards = ref(null)
     const cardsError = ref(null)
 
-    let collectionRef = projectFirestore.collection(collection).doc(documentId).collection(subCollection).doc(subDocId).collection(subSubCollection)
+    let collectionRef = projectFirestore.collection(collection).doc(documentId).collection(subCollection)
+    .doc(subDocId).collection(subSubCollection)
     
     // onSnapshot() - real time listener for DB
     //A document is added, changed, deleted
@@ -19,7 +20,7 @@ const getSubSubCollection = (collection, documentId, subCollection, subDocId, su
             //doc.data().createdAt - required, otherwise user recieves 
             //local version of snap using local createdAt. Meaning, 
             // user recieves not fully created snapshot. 
-         results.push({...doc.data(), cardId:doc.id})
+           results.push({...doc.data(), cardId:doc.id})
           // console.log(doc.data())
         //   for (let i=0; i<results.length; i++){
         //     console.log("EMAIL: " + results[i].id)
@@ -35,7 +36,7 @@ const getSubSubCollection = (collection, documentId, subCollection, subDocId, su
          //console.log(doc)
         //  console.log(documents)
         for(let i=0; i <cards['value'].length; i++){
-           console.log("SUBDOC: " + cards['value'][i].id)
+           console.log("SUBSUBDOC: " + cards['value'][i].id)
         }
 //  }
         

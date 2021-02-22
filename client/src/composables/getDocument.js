@@ -14,7 +14,7 @@ const getDocument = (collection, documentId) => {
     //Contains all docs and data at that moment in time
         documentRef.onSnapshot((snap) => {
          let result = {}
-         result = snap.data().createdAt && {...snap.data(), id:snap.id}
+         result = {...snap.data(), id:snap.id}
          document.value = result
          error.value = null,
 

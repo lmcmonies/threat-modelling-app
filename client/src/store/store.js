@@ -7,6 +7,8 @@ import {useRoute} from 'vue-router'
 export default createStore({
   state: {
     gameId: '',
+    playerId: '',
+    playersCards: [],
     allCardsArray: 
     [
       {id: 1, src: require('../assets/EoPCards/Suits/DenialofService/2DenialofService.png')},
@@ -56,9 +58,22 @@ playZone: [],
     shuffledCard(state){return state.shuffledCardsArray},
     playersCards(state){ return state.players[0].cards},
     playZoneCard(state){return state.playZone},
-    getGameId(state){return state.gameId}
+    getGameId(state){return state.gameId},
+    getPlayersCards(state){return state.playersCards}
   },
   mutations: {
+    updatePlayerId(state, playerId){
+    state.playerId = playerId
+    //console.log("Player Id From Store: " + playerId)
+    },
+    updatePlayersCards(state, playersCards){
+     state.playersCards = playersCards
+     for(let i=0; i<playersCards.length; i++){
+      console.log("Players Cards Store: " + state.playersCards[i].id)
+     }
+  
+    },
+
     updateGameId(state, id){
     state.gameId = id
     console.log(id)
@@ -120,6 +135,12 @@ playZone: [],
 
   updateGameId({commit}, id ){
     commit('updateGameId', id)
+  },
+  updatePlayerId({commit}, playerId){
+   commit('updatePlayerId', playerId)
+  },
+  updatePlayersCards({commit}, playersCards){
+    commit('updatePlayersCards', playersCards)
   }
       
     
