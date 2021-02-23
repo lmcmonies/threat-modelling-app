@@ -40,7 +40,7 @@ export default {
   let gameId = route.params.id.toString()
 
   var subRef = projectFirestore.collection('games').doc(gameId).collection('players')
-
+  var gameRef = projectFirestore.collection('games').doc(gameId)
 
   const store = useStore()
   const {shuffleCards} = useMutations(['shuffleCards'])
@@ -154,6 +154,12 @@ let players = []
           subRef.doc(players[i]).collection('cards').add(cardIds[x])
         }
      }
+
+    //  let data = {
+    //    gameActive: document.value.isGameActive
+    //  }
+     gameRef.update({isGameActive: true})
+
  }
 
   watch(document, async () => {
@@ -168,11 +174,25 @@ let players = []
       if(!data.gameActive){
       shuffleCards()
       distributeCards()
-
+       
       
        }
      }
     });
+
+    let updatePlayZone = (card) => {
+      let data = {
+        id: card.id,
+        src:card.src
+      }
+       let pid = computed(() => store.state.playerId ) 
+    console.log("Updating Play Zone")
+   // for(let i=0; i < players.length; i++){
+     // if(players[i].id === pid ){
+          gameRef.update({playZoneCardId: data})
+     // }
+   // }
+    }
 
 
 // watch(cards, async () => {
@@ -201,7 +221,7 @@ let players = []
 
 //     }
 
-    return {document, documents, error, err, pCards, cardsError}
+    return {document, documents, error, err, pCards, cardsError, updatePlayZone}
             
     
     }
@@ -211,7 +231,7 @@ let players = []
 <style scoped>
 .hand-area{
 
-  height:50%;   
+  height:70%;   
   width: 90%;
   font-family: 'Trebuchet MS';
   background-position: bottom;
@@ -222,8 +242,9 @@ let players = []
   display: block;
   overflow: auto;
   padding-bottom: 10px;
+  margin-bottom: 10px;
   position: relative;
-    top: 50%;
+    top: 100%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);

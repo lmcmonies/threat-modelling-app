@@ -3,7 +3,7 @@
     <Navbar />
     <!-- <button class="button" @click="shuffle">Shuffle Cards</button> -->
      <!-- <button class="button" @click="distribute">Distribute Cards</button> -->
-    <ChatBox />
+    <ChatBox class="chat-box"/>
     <PlayZone class="play-zone" />
      <HandArea class="hand-area"/>
   
@@ -71,7 +71,7 @@ export default {
 <style scoped>
 
 .container{
-  overflow: auto;
+   overflow-y: auto;
 }
  .button {
   font-family: 'Courier New';
@@ -92,14 +92,18 @@ export default {
 }
 .hand-area{
    position: fixed;
-    bottom: 0;
-    height: 30%;
+   bottom: 0;
+    height: 50%;
     width: 90%;
 }
 .play-zone{
    position: fixed;
     bottom: 0;
-    height: 60%;
+    height: 55%;
     width: 20%;
+}
+.chat-box{
+ padding-top: 10px;
+ margin-top: 10px;
 }
 </style>

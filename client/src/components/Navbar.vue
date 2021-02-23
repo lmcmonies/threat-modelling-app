@@ -4,19 +4,19 @@
   <nav v-if="user">
     <div>
       <p>Playing as {{ user.displayName }}</p>
-    
+       <button class="button" @click="handleClick">Logout</button>
 
     </div>
      <div class="title-container">
       <h1>Elevation of Privilege</h1>
      
-         <button class="button" @click="handleClick">Logout</button>
+        
       </div>
     
       
       
    <div v-if="!isReady">
-     <button  v-on:click="isReady=!isReady" v-bind:class="{isReady: isReady}" @click="readyToPlay">Ready To Play?</button>
+     <button  class="button" v-on:click="isReady=!isReady" v-bind:class="{isReady: isReady}" @click="readyToPlay">Ready?</button>
     </div>
   </nav>
 </template>
@@ -111,7 +111,7 @@ export default {
   background-color: white; 
   color: black; 
   border: 2px solid #4CAF50;
-  width: 10%;
+  width: 100%;
   padding: 14px 20px;
   margin: 8px 0;
   cursor: pointer;
