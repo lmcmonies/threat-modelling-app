@@ -8,6 +8,7 @@ export default createStore({
   state: {
     gameId: '',
     playerId: '',
+    timerValue: 60,
     playersCards: [],
     allCardsArray: 
     [
@@ -62,10 +63,17 @@ playZone: [],
     getPlayersCards(state){return state.playersCards}
   },
   mutations: {
+
+    decrementTimerValue(state, value){
+     state.timerValue = value
+     console.log("STATE TIMER VAL: " + state.timerValue)
+    },
+
     updatePlayerId(state, playerId){
     state.playerId = playerId
     //console.log("Player Id From Store: " + playerId)
     },
+
     updatePlayersCards(state, playersCards){
      state.playersCards = playersCards
      for(let i=0; i<playersCards.length; i++){
@@ -141,6 +149,9 @@ playZone: [],
   },
   updatePlayersCards({commit}, playersCards){
     commit('updatePlayersCards', playersCards)
+  },
+  decrementTimerValue({commit}, value){
+    commit('decrementTimerValue', value)
   }
       
     

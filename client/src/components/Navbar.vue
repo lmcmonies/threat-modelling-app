@@ -41,7 +41,8 @@ export default {
      {
       email:id,
       totalPoints:0,
-      ready: true
+      ready: true,
+      turn: false
      }
  const route = useRoute()
 

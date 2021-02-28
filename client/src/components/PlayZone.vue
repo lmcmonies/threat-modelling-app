@@ -2,7 +2,9 @@
   <div class='play-zone'>
 
     <div v-for="c in card" v-bind:key="c.id">
+      
             <figure><img class="card" :src="c.src"/></figure>
+     
         </div> 
     
 
@@ -59,7 +61,7 @@ setup(){
 <style scoped>
 .play-zone{
 
-  height:30%;   
+  height:20%;   
   width: 25%;
   font-family: 'Courier New';
   background-position: bottom;

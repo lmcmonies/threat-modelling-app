@@ -25,11 +25,13 @@ import { useRouter } from 'vue-router'
 import {useRoute} from 'vue-router'
 import {useStore} from 'vuex'
 import getDocument from '../composables/getDocument'
-import {useState, useGetters, useMutations} from '../composables/useStore'
+import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
 
 export default {
   components: { Navbar, ChatBox, HandArea, PlayZone},
   setup() {
+  
+
    const {shuffledCards} = useGetters(['shuffledCards'])
     const {shuffleCards} = useMutations(['shuffleCards'])
     const {distributeCards} = useMutations(['distributeCards'])
@@ -38,9 +40,20 @@ export default {
    
     const router = useRouter()
     const { user } = getUser()
-
+      const store = useStore()
      const route = useRoute()
+
+       let timerVal = computed(() => store.state.timerValue) 
+       const {decrementTimerValue} = useActions(['decrementTimerValue'])
      
+  let decrementTimer = setInterval(() => {
+     if(timerVal.value === 0){
+       clearInterval(decrementTimer)
+     }else{
+       decrementTimerValue(timerVal.value -1)
+       console.log("CHATROOM TIMER VAL: " + timerVal.value)
+     }
+  },1000)
 
   let document = route.params.id.toString()
   let collection = 'games'
@@ -93,14 +106,14 @@ export default {
 .hand-area{
    position: fixed;
    bottom: 0;
-    height: 50%;
-    width: 90%;
+    height: 55%;
+    width: 80%;
 }
 .play-zone{
    position: fixed;
-    bottom: 0;
-    height: 55%;
-    width: 20%;
+   
+    height: 52%;
+    width: 21%;
 }
 .chat-box{
  padding-top: 10px;

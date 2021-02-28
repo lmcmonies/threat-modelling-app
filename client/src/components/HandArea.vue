@@ -74,17 +74,10 @@ export default {
        }
        updatePlayersCards(playersCards)
        })
-         //let pCards = computed(() => store.state.playersCards)
-      //    watch(pCards, async () => {
-      //    for(let i=0; i< 4; i++){
-      
-      //    console.log("PCARD: " + pCards.value[i].id)
-      //  }
-      //  })
        return {cards, cardsError}
 }, 300)
 
- let pCards = computed(() => store.state.playersCards)
+let pCards = computed(() => store.state.playersCards)
 
 let players = []
 
@@ -95,14 +88,14 @@ let players = []
         let playerIds = []
     for(let i=0; i < documents.value.length; i++){
       if(playerIds[i] !== documents.value[i].id){
-      playerIds.push(documents.value[i].id)
+      playerIds.push(documents.value[i])
       }
     }
     console.log(playerIds)
     if(playerIds.length === document.value.totalPlayers){
      for(let x=0; x< playerIds.length; x++){
        players.push(playerIds[x])
-       console.log("Players Array: " + players[x])
+       console.log("Players Array: " + players[x].id)
 
        for(let i=0; i < documents.value.length; i++){
        if(user.value.email === documents.value[i].email){
@@ -133,12 +126,12 @@ let players = []
     
     let cardGenerator = () => {
         let cardIds = []
-         //console.log("Min: " + min)
-          //console.log("Max: " + max)
+         console.log("Min: " + min)
+          console.log("Max: " + max)
       
       for(let i = min; i<max; i++)
       {
-      // console.log("Card ID: " + shuffledCards.value[i].id)
+       console.log("Card ID: " + shuffledCards.value[i].id)
        cardIds.push(shuffledCards.value[i])
       }
 
@@ -154,12 +147,7 @@ let players = []
           subRef.doc(players[i]).collection('cards').add(cardIds[x])
         }
      }
-
-    //  let data = {
-    //    gameActive: document.value.isGameActive
-    //  }
      gameRef.update({isGameActive: true})
-
  }
 
   watch(document, async () => {
@@ -181,17 +169,32 @@ let players = []
     });
 
     let updatePlayZone = (card) => {
+
+      let player = []
+      let playZone = {
+        occupied: document.value.playZoneOccupied
+      }
       let data = {
         id: card.id,
         src:card.src
       }
-       let pid = computed(() => store.state.playerId ) 
+      let pid = computed(() => store.state.playerId ) 
+       for(let x=0; x < players.length; x++){
+         console.log("PLAYERS: " + players[x].turn)
+         console.log(pid.value)
+         if(pid.value === players[x].id){
+           console.log("PID: " + pid.value + "ID: " + players[x].id)
+           player.push(players[x])
+         }
+       }
     console.log("Updating Play Zone")
-   // for(let i=0; i < players.length; i++){
-     // if(players[i].id === pid ){
+    for(let i=0; i < player.length; i++){
+      if(player[i].turn && !playZone.occupied){
+        console.log(player[i].turn)
           gameRef.update({playZoneCardId: data})
-     // }
-   // }
+          gameRef.update({playZoneOccupied: true})
+      }
+    }
     }
 
 
