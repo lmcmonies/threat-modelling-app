@@ -3,6 +3,7 @@
     <Navbar />
     <!-- <button class="button" @click="shuffle">Shuffle Cards</button> -->
      <!-- <button class="button" @click="distribute">Distribute Cards</button> -->
+     <div class="timer"><h1>Timer: {{timerVal}}</h1></div>
     <ChatBox class="chat-box"/>
     <PlayZone class="play-zone" />
      <HandArea class="hand-area"/>
@@ -26,11 +27,21 @@ import {useRoute} from 'vue-router'
 import {useStore} from 'vuex'
 import getDocument from '../composables/getDocument'
 import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
+import {projectFirestore, increment} from '../firebase/config'
 
 export default {
   components: { Navbar, ChatBox, HandArea, PlayZone},
   setup() {
-  
+     const router = useRouter()
+    const { user } = getUser()
+      const store = useStore()
+      const route = useRoute()
+
+     let documentId= route.params.id.toString()
+     let collection = 'games'
+    
+    const { document, error } = getDocument(collection, documentId)
+      var gameRef = projectFirestore.collection('games').doc(documentId)
 
    const {shuffledCards} = useGetters(['shuffledCards'])
     const {shuffleCards} = useMutations(['shuffleCards'])
@@ -38,37 +49,46 @@ export default {
 
     const  distribute = () => distributeCards()
    
-    const router = useRouter()
-    const { user } = getUser()
-      const store = useStore()
-     const route = useRoute()
+ 
+   
 
        let timerVal = computed(() => store.state.timerValue) 
        const {decrementTimerValue} = useActions(['decrementTimerValue'])
      
-  let decrementTimer = setInterval(() => {
+  
+
+  watch(document, async() => {
+    let doc = {
+      occupied: document.value.playZoneOccupied,
+      timerValue: document.value.timerValue
+    }
+    console.log(doc.occupied)
+    if(doc.occupied){
+   let decrementTimer = setInterval(() => {
      if(timerVal.value === 0){
+       gameRef.update({playZoneOccupied: false, playZoneCardId: {}})
+       gameRef.update({currentTurn: increment})
        clearInterval(decrementTimer)
+       decrementTimerValue(30)
      }else{
        decrementTimerValue(timerVal.value -1)
-       console.log("CHATROOM TIMER VAL: " + timerVal.value)
+     
+       //console.log("CHATROOM TIMER VAL: " + doc.timerValue-1)
      }
   },1000)
+  }
+  })
+ 
 
-  let document = route.params.id.toString()
-  let collection = 'games'
-    
-  const { doc, error } = getDocument(collection, document)
-
-   const fDoc = computed(() => {
-      if(doc.value){
-         return doc.value.map(doc => {
-           console.log("FDOC: " + doc.gameId)
-              return {...doc}
+  //  const fDoc = computed(() => {
+  //     if(doc.value){
+  //        return doc.value.map(doc => {
+  //          console.log("FDOC: " + doc.gameId)
+  //             return {...doc}
          
-        })
-     }
-    })
+  //       })
+  //    }
+  //   })
     // if the user value is ever null, redirect to welcome screen
     watch(user, () => {
       if (!user.value) {
@@ -76,7 +96,7 @@ export default {
       }
     })
 
-    return {shuffledCards, distribute, fDoc}
+    return {shuffledCards, distribute, timerVal, document, error}
   }
 }
 </script>
@@ -85,6 +105,7 @@ export default {
 
 .container{
    overflow-y: auto;
+    font-family: 'Courier New';
 }
  .button {
   font-family: 'Courier New';
@@ -118,5 +139,11 @@ export default {
 .chat-box{
  padding-top: 10px;
  margin-top: 10px;
+}
+
+.timer{
+   border: 2px solid #4CAF50;
+   border-radius: 4px;
+   width: 15%;
 }
 </style>

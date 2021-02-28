@@ -22,5 +22,6 @@ const projectFirestore = firebase.firestore()
 const timestamp = firebase.firestore.FieldValue.serverTimestamp
 const aUnion = firebase.firestore.FieldValue.arrayUnion
 const increment = firebase.firestore.FieldValue.increment(1)
+//const decrement = firebase.firestore.FieldValue.increment(-1)
 
-export { projectAuth, projectFirestore, timestamp, aUnion, increment }
+export { projectAuth, projectFirestore, timestamp, aUnion, increment}

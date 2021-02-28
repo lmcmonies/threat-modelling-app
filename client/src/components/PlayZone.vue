@@ -2,9 +2,9 @@
   <div class='play-zone'>
 
     <div v-for="c in card" v-bind:key="c.id">
-      
+      <div v-if="c.id !== undefined">
             <figure><img class="card" :src="c.src"/></figure>
-     
+      </div>
         </div> 
     
 
@@ -50,6 +50,7 @@ setup(){
    card.value = result
 
   console.log(subData.src)
+  console.log(subData)
 
   })
 

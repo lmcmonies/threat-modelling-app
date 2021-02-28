@@ -8,7 +8,7 @@ export default createStore({
   state: {
     gameId: '',
     playerId: '',
-    timerValue: 60,
+    timerValue: 30,
     playersCards: [],
     allCardsArray: 
     [
@@ -152,7 +152,8 @@ playZone: [],
   },
   decrementTimerValue({commit}, value){
     commit('decrementTimerValue', value)
-  }
+  },
+ 
       
     
 }

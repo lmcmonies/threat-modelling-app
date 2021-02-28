@@ -82,7 +82,7 @@ let pCards = computed(() => store.state.playersCards)
 let players = []
 
 
-
+//watching players
   watch(documents, async () => {
     console.log("PLAYERS")
         let playerIds = []
@@ -104,6 +104,18 @@ let players = []
        }
      }
     }
+    
+    let currentTurn = {
+      turn: document.value.currentTurn
+    }
+    console.log("Current Turn Index: " + currentTurn.turn)
+    for(let j=0; j < players.length; j++){
+      console.log("PLAYER INDEX: " + j)
+      if(j === currentTurn.turn){
+           subRef.doc(players[currentTurn.turn].id).update({turn: true})
+      }
+    }
+ 
   })
 
  let distributeCards = () => {
@@ -162,8 +174,6 @@ let players = []
       if(!data.gameActive){
       shuffleCards()
       distributeCards()
-       
-      
        }
      }
     });
