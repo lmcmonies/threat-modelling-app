@@ -21,6 +21,7 @@ import PlayZone from '../components/PlayZone.vue'
 import HandArea from '../components/HandArea'
 import ChatBox from '../components/ChatBox'
 import getUser from '../composables/getUser'
+import getSubCollection from '../composables/getSubCollection'
 import { watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import {useRoute} from 'vue-router'
@@ -39,9 +40,14 @@ export default {
 
      let documentId= route.params.id.toString()
      let collection = 'games'
+       let subCollection = 'players'
     
     const { document, error } = getDocument(collection, documentId)
+    //players
+    const { documents, err} =  getSubCollection(collection, documentId, subCollection)
+
       var gameRef = projectFirestore.collection('games').doc(documentId)
+       var subRef = projectFirestore.collection('games').doc(documentId).collection('players')
 
    const {shuffledCards} = useGetters(['shuffledCards'])
     const {shuffleCards} = useMutations(['shuffleCards'])
@@ -49,27 +55,71 @@ export default {
 
     const  distribute = () => distributeCards()
    
- 
+    let pid = computed(() => store.state.playerId ) 
    
 
        let timerVal = computed(() => store.state.timerValue) 
        const {decrementTimerValue} = useActions(['decrementTimerValue'])
-     
-  
+     let players = []
+  //watching players
+  watch(documents, async () => {
+    //console.log("PLAYERS")
+        let playerIds = []
+    for(let i=0; i < documents.value.length; i++){
+      if(playerIds[i] !== documents.value[i].id){
+      playerIds.push(documents.value[i])
+      }
+    }
+    //console.log(playerIds)
+    if(playerIds.length === document.value.totalPlayers){
+     for(let x=0; x< playerIds.length; x++){
+       players.push(playerIds[x])
+       //console.log("Players Array: " + players[x].id)
+     }
+    }
+  })
+
+//let nextTurn = 0
 
   watch(document, async() => {
     let doc = {
       occupied: document.value.playZoneOccupied,
-      timerValue: document.value.timerValue
+      currentTurnIndex: document.value.currentTurn.index,
+      currentTurnId: document.value.currentTurn.playerId,
+      nextTurn: document.value.currentTurn.nextTurn,
+      totalPlayers: document.value.totalPlayers
     }
-    console.log(doc.occupied)
+    
+    // for(let j=0; j< players.length; j++){
+    //   if(doc.currentTurnIndex === j){
+    //      gameRef.update({currentTurn:{playerId:players[j].id}})
+    //   }
+    // }
+    //nextTurn = doc.currentTurnIndex + 1
+    console.log("CURRENT TURN INDEX: " + doc.currentTurnIndex)
+    console.log("NEXT TURN: " + doc.nextTurn)
     if(doc.occupied){
    let decrementTimer = setInterval(() => {
      if(timerVal.value === 0){
-       gameRef.update({playZoneOccupied: false, playZoneCardId: {}})
-       gameRef.update({currentTurn: increment})
+       //for(let i=0; i < players.length; i++){
+         let turn 
+         let index
+       if(pid.value === doc.currentTurnId){
+         if(doc.nextTurn !== doc.totalPlayers -1){
+          turn = doc.nextTurn + 1
+          index = doc.currentTurnIndex + 1
+         }else{
+           turn = 0
+           index = -1
+         }
+         
+        gameRef.update({playZoneOccupied: false, playZoneCardId: {}, 
+        currentTurn:{index:index, nextTurn: turn,playerId:players[doc.nextTurn].id}})
+      // }
+       }     
        clearInterval(decrementTimer)
-       decrementTimerValue(30)
+       decrementTimerValue(10)
+         
      }else{
        decrementTimerValue(timerVal.value -1)
      
@@ -77,7 +127,26 @@ export default {
      }
   },1000)
   }
+    // if(pid === previousTurn){
+    //     subRef.doc(players[previousTurn].id).update({turn: false})
+    //   }
+    // if(doc.currentTurnIndex === doc.totalPlayers){
+    //       gameRef.update({currentTurn:{index:0, nextTurn:1, playerId: players[0].id}})
+    //    }
+
+    //    if(doc.nextTurn === doc.totalPlayers){
+    //      gameRef.update({})
+    //    }
   })
+
+
+
+// for(let x=0; x < players.length; x++){
+//   if(doc.currentTurn !== x){
+//     subRef.doc(players[x].id).update({turn: false})
+//   }
+// }
+
  
 
   //  const fDoc = computed(() => {
@@ -96,7 +165,7 @@ export default {
       }
     })
 
-    return {shuffledCards, distribute, timerVal, document, error}
+    return {shuffledCards, distribute, timerVal, document, error, documents, err}
   }
 }
 </script>

@@ -35,9 +35,9 @@ const getSubSubCollection = async (collection, documentId, subCollection, subDoc
     //for (let doc in documents){
          //console.log(doc)
         //  console.log(documents)
-        for(let i=0; i <cards['value'].length; i++){
-           console.log("SUBSUBDOC: " + cards['value'][i].id)
-        }
+        // for(let i=0; i <cards['value'].length; i++){
+        //    console.log("SUBSUBDOC: " + cards['value'][i].id)
+        // }
 //  }
         
        

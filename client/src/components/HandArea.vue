@@ -80,22 +80,25 @@ export default {
 let pCards = computed(() => store.state.playersCards)
 
 let players = []
+//let playersComplete = []
 
 
 //watching players
   watch(documents, async () => {
-    console.log("PLAYERS")
+   // console.log("PLAYERS")
         let playerIds = []
     for(let i=0; i < documents.value.length; i++){
       if(playerIds[i] !== documents.value[i].id){
       playerIds.push(documents.value[i])
       }
     }
-    console.log(playerIds)
+    //console.log(playerIds)
     if(playerIds.length === document.value.totalPlayers){
      for(let x=0; x< playerIds.length; x++){
-       players.push(playerIds[x])
-       console.log("Players Array: " + players[x].id)
+       players.push(playerIds[x].id)
+       //playersComplete.push(playerIds[x])
+      // console.log("Players Array: " + players[x])
+     //  console.log("Players Complete: " + playersComplete[x])
 
        for(let i=0; i < documents.value.length; i++){
        if(user.value.email === documents.value[i].email){
@@ -105,16 +108,17 @@ let players = []
      }
     }
     
-    let currentTurn = {
-      turn: document.value.currentTurn
-    }
-    console.log("Current Turn Index: " + currentTurn.turn)
-    for(let j=0; j < players.length; j++){
-      console.log("PLAYER INDEX: " + j)
-      if(j === currentTurn.turn){
-           subRef.doc(players[currentTurn.turn].id).update({turn: true})
-      }
-    }
+    // let currentTurn = {
+    //   turn: document.value.currentTurn
+    // }
+    // // //console.log("Current Turn Index: " + currentTurn.turn)
+    // // for(let j=0; j < players.length; j++){
+    //   console.log("PLAYER INDEX: " + j)
+    //   if(j === currentTurn.turn){
+    //        subRef.doc(players[currentTurn.turn]).update({turn: true})
+    //        gameRef.update({currentTurn:j})
+    //   }
+    // }
  
   })
 
@@ -181,8 +185,9 @@ let players = []
     let updatePlayZone = (card) => {
 
       let player = []
-      let playZone = {
-        occupied: document.value.playZoneOccupied
+      let game = {
+        occupied: document.value.playZoneOccupied,
+         currentPlayer: document.value.currentTurn.playerId
       }
       let data = {
         id: card.id,
@@ -190,19 +195,20 @@ let players = []
       }
       let pid = computed(() => store.state.playerId ) 
        for(let x=0; x < players.length; x++){
-         console.log("PLAYERS: " + players[x].turn)
+         console.log("PLAYERS: " + players[x])
          console.log(pid.value)
-         if(pid.value === players[x].id){
-           console.log("PID: " + pid.value + "ID: " + players[x].id)
+         if(pid.value === players[x]){
+           //console.log("PID: " + pid.value + "ID: " + players[x])
            player.push(players[x])
          }
        }
-    console.log("Updating Play Zone")
+
     for(let i=0; i < player.length; i++){
-      if(player[i].turn && !playZone.occupied){
-        console.log(player[i].turn)
-          gameRef.update({playZoneCardId: data})
-          gameRef.update({playZoneOccupied: true})
+      console.log("THE PLAYER: " + player[i])
+      console.log("CURRENT PLAYER: " + game.currentPlayer)
+      if(player[i] === game.currentPlayer && game.occupied === false){
+          console.log("Updating Play Zone")
+          gameRef.update({playZoneCardId: data, playZoneOccupied: true})
       }
     }
     }

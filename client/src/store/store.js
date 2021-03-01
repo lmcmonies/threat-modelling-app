@@ -8,7 +8,7 @@ export default createStore({
   state: {
     gameId: '',
     playerId: '',
-    timerValue: 30,
+    timerValue: 10,
     playersCards: [],
     allCardsArray: 
     [
@@ -30,39 +30,23 @@ export default createStore({
       {id: 16, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/7ElevationofPrivilege.png')}
     ],
     shuffledCardsArray: [],
-
-    players: [{
-        playerId: 1,
-        playerName: 'Heman',
-        cards: []
-    },
-    {
-        playerId: 2,
-        playerName: 'Grayskull',
-        cards: [],
-    },
-    {
-        playerId: 3,
-        playerName: 'Skeletor',
-        cards: [],
-    },
-    {
-        playerId: 4,
-        playerName: 'Superman',
-        cards: [],
-    }],
+    players: [],
 
 playZone: [],
 
   },
   getters: {
     shuffledCard(state){return state.shuffledCardsArray},
-    playersCards(state){ return state.players[0].cards},
+    getPlayers(state){ return state.players},
     playZoneCard(state){return state.playZone},
     getGameId(state){return state.gameId},
     getPlayersCards(state){return state.playersCards}
   },
   mutations: {
+
+    updatePlayersArray(state, players){
+     state.players = players
+    },
 
     decrementTimerValue(state, value){
      state.timerValue = value
@@ -76,9 +60,9 @@ playZone: [],
 
     updatePlayersCards(state, playersCards){
      state.playersCards = playersCards
-     for(let i=0; i<playersCards.length; i++){
-      console.log("Players Cards Store: " + state.playersCards[i].id)
-     }
+    //  for(let i=0; i<playersCards.length; i++){
+    //   console.log("Players Cards Store: " + state.playersCards[i].id)
+    //  }
   
     },
 
@@ -153,6 +137,10 @@ playZone: [],
   decrementTimerValue({commit}, value){
     commit('decrementTimerValue', value)
   },
+
+  updatePlayersArray({commit}, players){
+    commit('updatePlayersArray', players)
+  }
  
       
     
