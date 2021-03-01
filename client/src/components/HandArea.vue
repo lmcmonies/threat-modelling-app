@@ -195,7 +195,7 @@ let players = []
       }
       let pid = computed(() => store.state.playerId ) 
        for(let x=0; x < players.length; x++){
-         console.log("PLAYERS: " + players[x])
+        // console.log("PLAYERS: " + players[x])
          console.log(pid.value)
          if(pid.value === players[x]){
            //console.log("PID: " + pid.value + "ID: " + players[x])
@@ -204,8 +204,6 @@ let players = []
        }
 
     for(let i=0; i < player.length; i++){
-      console.log("THE PLAYER: " + player[i])
-      console.log("CURRENT PLAYER: " + game.currentPlayer)
       if(player[i] === game.currentPlayer && game.occupied === false){
           console.log("Updating Play Zone")
           gameRef.update({playZoneCardId: data, playZoneOccupied: true})

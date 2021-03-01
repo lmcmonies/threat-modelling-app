@@ -3,7 +3,16 @@
     <Navbar />
     <!-- <button class="button" @click="shuffle">Shuffle Cards</button> -->
      <!-- <button class="button" @click="distribute">Distribute Cards</button> -->
+  
+     <div v-if="document.currentTurn.playerId === pid">
+       <h1>Your Turn</h1>
+          </div>
      <div class="timer"><h1>Timer: {{timerVal}}</h1></div>
+     <div class="poll"><h1>Is It A Valid Threat? </h1>
+     <button class="button">Yes</button>
+     <button class="button2">No</button>
+     </div>
+  
     <ChatBox class="chat-box"/>
     <PlayZone class="play-zone" />
      <HandArea class="hand-area"/>
@@ -61,47 +70,43 @@ export default {
        let timerVal = computed(() => store.state.timerValue) 
        const {decrementTimerValue} = useActions(['decrementTimerValue'])
      let players = []
+
   //watching players
   watch(documents, async () => {
-    //console.log("PLAYERS")
         let playerIds = []
     for(let i=0; i < documents.value.length; i++){
       if(playerIds[i] !== documents.value[i].id){
       playerIds.push(documents.value[i])
       }
     }
-    //console.log(playerIds)
     if(playerIds.length === document.value.totalPlayers){
      for(let x=0; x< playerIds.length; x++){
        players.push(playerIds[x])
-       //console.log("Players Array: " + players[x].id)
      }
     }
   })
 
-//let nextTurn = 0
 
+//Manages Turns 
   watch(document, async() => {
     let doc = {
       occupied: document.value.playZoneOccupied,
       currentTurnIndex: document.value.currentTurn.index,
       currentTurnId: document.value.currentTurn.playerId,
       nextTurn: document.value.currentTurn.nextTurn,
-      totalPlayers: document.value.totalPlayers
+      totalPlayers: document.value.totalPlayers,
+      yes: document.value.currentTurn.poll.yes,
+      no: document.value.currentTurn.poll.no
     }
-    
-    // for(let j=0; j< players.length; j++){
-    //   if(doc.currentTurnIndex === j){
-    //      gameRef.update({currentTurn:{playerId:players[j].id}})
-    //   }
-    // }
-    //nextTurn = doc.currentTurnIndex + 1
-    console.log("CURRENT TURN INDEX: " + doc.currentTurnIndex)
-    console.log("NEXT TURN: " + doc.nextTurn)
+    console.log("YES:" + doc.yes)
+   console.log("PLAYERID: " + doc.currentTurnId)
+    if(doc.currentTurnID === ""){
+       gameRef.update({currentTurn: {playerId: players[0].id}})
+    }
+
     if(doc.occupied){
    let decrementTimer = setInterval(() => {
      if(timerVal.value === 0){
-       //for(let i=0; i < players.length; i++){
          let turn 
          let index
        if(pid.value === doc.currentTurnId){
@@ -112,52 +117,19 @@ export default {
            turn = 0
            index = -1
          }
-         
         gameRef.update({playZoneOccupied: false, playZoneCardId: {}, 
         currentTurn:{index:index, nextTurn: turn,playerId:players[doc.nextTurn].id}})
-      // }
        }     
        clearInterval(decrementTimer)
        decrementTimerValue(10)
-         
      }else{
        decrementTimerValue(timerVal.value -1)
-     
-       //console.log("CHATROOM TIMER VAL: " + doc.timerValue-1)
      }
   },1000)
   }
-    // if(pid === previousTurn){
-    //     subRef.doc(players[previousTurn].id).update({turn: false})
-    //   }
-    // if(doc.currentTurnIndex === doc.totalPlayers){
-    //       gameRef.update({currentTurn:{index:0, nextTurn:1, playerId: players[0].id}})
-    //    }
-
-    //    if(doc.nextTurn === doc.totalPlayers){
-    //      gameRef.update({})
-    //    }
   })
 
 
-
-// for(let x=0; x < players.length; x++){
-//   if(doc.currentTurn !== x){
-//     subRef.doc(players[x].id).update({turn: false})
-//   }
-// }
-
- 
-
-  //  const fDoc = computed(() => {
-  //     if(doc.value){
-  //        return doc.value.map(doc => {
-  //          console.log("FDOC: " + doc.gameId)
-  //             return {...doc}
-         
-  //       })
-  //    }
-  //   })
     // if the user value is ever null, redirect to welcome screen
     watch(user, () => {
       if (!user.value) {
@@ -165,7 +137,7 @@ export default {
       }
     })
 
-    return {shuffledCards, distribute, timerVal, document, error, documents, err}
+    return {shuffledCards, distribute, timerVal, document, error, documents, err, pid}
   }
 }
 </script>
@@ -176,6 +148,7 @@ export default {
    overflow-y: auto;
     font-family: 'Courier New';
 }
+
  .button {
   font-family: 'Courier New';
   font-size: 30px;
@@ -191,6 +164,24 @@ export default {
 }
 .button:hover{
   background-color: #45a049;
+     font-family: 'Courier New';
+}
+
+.button2 {
+  font-family: 'Courier New';
+  font-size: 30px;
+  border-radius: 4px;
+  font-family: 'Courier New';
+  background-color: white; 
+  color: black; 
+  border: 2px solid red;
+  width: 15%;
+  padding: 14px 20px;
+  margin: 8px 0;
+  cursor: pointer;
+}
+.button2:hover{
+  background-color: red;
      font-family: 'Courier New';
 }
 .hand-area{
@@ -214,5 +205,13 @@ export default {
    border: 2px solid #4CAF50;
    border-radius: 4px;
    width: 15%;
+   color: hotpink;
+    margin-top: 10px;
+ 
+   
+}
+.poll{
+width: 40%;
+display:inline-block;
 }
 </style>

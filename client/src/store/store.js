@@ -50,7 +50,7 @@ playZone: [],
 
     decrementTimerValue(state, value){
      state.timerValue = value
-     console.log("STATE TIMER VAL: " + state.timerValue)
+     //console.log("STATE TIMER VAL: " + state.timerValue)
     },
 
     updatePlayerId(state, playerId){
