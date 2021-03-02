@@ -9,8 +9,8 @@
           </div>
      <div class="timer"><h1>Timer: {{timerVal}}</h1></div>
      <div class="poll"><h1>Is It A Valid Threat? </h1>
-     <button class="button">Yes</button>
-     <button class="button2">No</button>
+     <button class="button" @click="pollYes">Yes</button>
+     <button class="button2" @click="pollNo">No</button>
      </div>
   
     <ChatBox class="chat-box"/>
@@ -95,13 +95,17 @@ export default {
       currentTurnId: document.value.currentTurn.playerId,
       nextTurn: document.value.currentTurn.nextTurn,
       totalPlayers: document.value.totalPlayers,
-      yes: document.value.currentTurn.poll.yes,
-      no: document.value.currentTurn.poll.no
+      yes: document.value.poll.yes,
+      no: document.value.poll.no
     }
     console.log("YES:" + doc.yes)
    console.log("PLAYERID: " + doc.currentTurnId)
     if(doc.currentTurnID === ""){
        gameRef.update({currentTurn: {playerId: players[0].id}})
+    }
+
+    if(doc.yes + doc.no === doc.totalPlayers){
+      gameRef.update({ pollOpen: false})
     }
 
     if(doc.occupied){
@@ -117,7 +121,7 @@ export default {
            turn = 0
            index = -1
          }
-        gameRef.update({playZoneOccupied: false, playZoneCardId: {}, 
+        gameRef.update({playZoneOccupied: false, playZoneCardId: {}, pollOpen: true,
         currentTurn:{index:index, nextTurn: turn,playerId:players[doc.nextTurn].id}})
        }     
        clearInterval(decrementTimer)
@@ -129,6 +133,24 @@ export default {
   }
   })
 
+  let pollYes = async () => {
+    console.log("Poll Yes")
+    let poll = {
+      yes:document.value.poll.yes,
+      no: document.value.poll.no
+    }
+   await gameRef.update({poll:{yes:poll.yes + 1, no: poll.no}})
+  }
+
+  let pollNo = async () => {
+    console.log("Poll No")
+    let poll = {
+      yes:document.value.poll.yes,
+      no: document.value.poll.no
+    }
+  await gameRef.update({poll:{no:poll.no + 1, yes: poll.yes}})
+  }
+
 
     // if the user value is ever null, redirect to welcome screen
     watch(user, () => {
@@ -137,7 +159,7 @@ export default {
       }
     })
 
-    return {shuffledCards, distribute, timerVal, document, error, documents, err, pid}
+    return {shuffledCards, distribute, timerVal, document, error, documents, err, pid, pollYes, pollNo}
   }
 }
 </script>

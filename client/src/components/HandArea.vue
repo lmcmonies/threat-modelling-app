@@ -187,7 +187,8 @@ let players = []
       let player = []
       let game = {
         occupied: document.value.playZoneOccupied,
-         currentPlayer: document.value.currentTurn.playerId
+         currentPlayer: document.value.currentTurn.playerId,
+         pollOpen: document.value.pollOpen
       }
       let data = {
         id: card.id,
@@ -204,7 +205,7 @@ let players = []
        }
 
     for(let i=0; i < player.length; i++){
-      if(player[i] === game.currentPlayer && game.occupied === false){
+      if(player[i] === game.currentPlayer && game.occupied === false && game.pollOpen === false){
           console.log("Updating Play Zone")
           gameRef.update({playZoneCardId: data, playZoneOccupied: true})
       }
