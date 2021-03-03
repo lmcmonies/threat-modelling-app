@@ -81,9 +81,22 @@ export default {
     }
     if(playerIds.length === document.value.totalPlayers){
      for(let x=0; x< playerIds.length; x++){
+ 
+      // console.log(playerIds[x])
        players.push(playerIds[x])
+       //console.log(players[x])
      }
     }
+
+    // for(let j=0; j< players.length; j++){
+    //   if(players.length > document.value.totalPlayers){
+    //   if(players[j].id === playerIds[j].id){
+    //     players.splice(j)
+    //   }
+    //   }
+    // }
+ 
+    console.log("PLAYERS ADDED: " + players)
   })
 
 
@@ -104,24 +117,46 @@ export default {
     if(doc.currentTurnID === ""){
        gameRef.update({currentTurn: {playerId: players[0].id}})
     }
+
+    //let playersPoints
+
+  //  for(let i=0; i < players.length; i++){
+  //    console.log("PLAYERS: " +  players)
+  //           console.log("PLAYER ID: "  + players[i].id)
+  //           console.log("CURRENT TURN PLAYER ID: " + doc.currentTurnId)
+  //   if(players[i].id === doc.previousTurn){
+  //       let player = {
+  //             totalPoints: players[i].totalPoints
+  //           }
+  //           playersPoints = player
+  //   }
+  //  }
+
+   
     
    //Updates Points Total Of Player Who PLayed Card
     if(doc.yes + doc.no === doc.totalPlayers){ // if total votes === total players
       if(doc.yes > doc.no){ //if yes is greater than no
-        for(let i=0; i < players.length; i++){ //loop through all players
-          if(players[i].id === doc.previousTurn){
-            //console.log("PLAYERS: " +  players)
-            //console.log("PLAYER ID: "  + players[i].id)
-           // console.log("CURRENT TURN PLAYER ID: " + doc.currentTurnId)
-            let player = {
-              totalPoints: players[i].totalPoints
-            }
-            console.log("TOTAL POINTS" + player.totalPoints)
-           subRef.doc(doc.previousTurn).update({totalPoints: player.totalPoints + 1})
+         //loop through all players
+         let playersPoints
+          for(let i=0; i < players.length; i++){
+            if(players[i].id === doc.previousTurn){
+             let player = {
+             totalPoints: players[i].totalPoints
           }
+          playersPoints = player.totalPoints
         }
-      }
+          }
+
+      
+      console.log("PLAYERS POINTS: " + playersPoints)
+      subRef.doc(doc.previousTurn).update({totalPoints: playersPoints + 1})
       gameRef.update({ pollOpen: false, poll: {yes: 0, no: 0}})
+
+      for(let v=0; v < players.length; v++){
+        subRef.doc(players[v].id).update({pollSubmitted: false})
+      }
+    }
     }
 
 
@@ -180,8 +215,8 @@ export default {
         }
        if(!player.pollSubbed)
         {
-         //await subRef.doc(pid.value).update({pollSubmitted: true})
-         //await gameRef.update({poll:{yes:poll.yes + 1, no: poll.no}})
+         await subRef.doc(pid.value).update({pollSubmitted: true})
+         await gameRef.update({poll:{yes:poll.yes + 1, no: poll.no}})
         }
      }
     }
@@ -205,8 +240,8 @@ export default {
         console.log("PLAYER SUBBED: " + player.pollSubbed)
        if(!player.pollSubbed)
         {
-          //await subRef.doc(pid.value).update({pollSubmitted: true})
-          //await gameRef.update({poll:{no:poll.no + 1, yes: poll.yes}})
+          await subRef.doc(pid.value).update({pollSubmitted: true})
+          await gameRef.update({poll:{no:poll.no + 1, yes: poll.yes}})
         }
      }
     }
