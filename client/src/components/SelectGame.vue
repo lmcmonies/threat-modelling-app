@@ -50,7 +50,7 @@ var docRef = projectFirestore.collection('games');
    let uid = uuid();
    let id = uid
    let newGame = {gameName: `${gameName.value}`, totalPlayers: parseInt(`${totalPlayers.value}`), 
-   currentTurn: {index:0, nextTurn:1, playerId:""}, playZoneCardId: "", playZoneOccupied: "", timerValue: 60, playersJoined: 0, isGameActive: false, createdAt: timestamp() };
+   currentTurn: {index:0, nextTurn:1, playerId:"", previousPlayerId: ""}, playZoneCardId: "", playZoneOccupied: "", timerValue: 60, playersJoined: 0, isGameActive: false, createdAt: timestamp() };
    updateGameId(id);
    await docRef.doc(id).set(newGame);
    await createPlayersSubCollection(id)

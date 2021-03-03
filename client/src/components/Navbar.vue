@@ -42,6 +42,7 @@ export default {
       email:id,
       totalPoints:0,
       ready: true,
+      pollSubmitted: false
      }
  const route = useRoute()
 

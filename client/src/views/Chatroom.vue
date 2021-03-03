@@ -105,14 +105,14 @@ export default {
        gameRef.update({currentTurn: {playerId: players[0].id}})
     }
     
-
-    if(doc.yes + doc.no === doc.totalPlayers){
-      if(doc.yes > doc.no){
-        for(let i=0; i < doc.totalPlayers; i++){
-          if(players[i].id === doc.currentTurnId){
-            console.log("PLAYERS: " +  players)
-            console.log("PLAYER ID: "  + players[i].id)
-            console.log("CURRENT TURN PLAYER ID: " + doc.currentTurnId)
+   //Updates Points Total Of Player Who PLayed Card
+    if(doc.yes + doc.no === doc.totalPlayers){ // if total votes === total players
+      if(doc.yes > doc.no){ //if yes is greater than no
+        for(let i=0; i < players.length; i++){ //loop through all players
+          if(players[i].id === doc.previousTurn){
+            //console.log("PLAYERS: " +  players)
+            //console.log("PLAYER ID: "  + players[i].id)
+           // console.log("CURRENT TURN PLAYER ID: " + doc.currentTurnId)
             let player = {
               totalPoints: players[i].totalPoints
             }
@@ -125,22 +125,32 @@ export default {
     }
 
 
-    if(doc.occupied){
-   let decrementTimer = setInterval(() => {
-     if(timerVal.value === 0){
+
+   //Updates currentTurn
+    if(doc.occupied){  //check to see if playzone is occupied. If there is a card in there.
+   let decrementTimer = setInterval(() => { //Execute timer if playzone is occupied
+     //console.log("PREVIOUS PLAYER ID INDEX: " + doc.nextTurn -1)
+     if(timerVal.value === 0){   //if timer hits 0, 
          let turn 
          let index
-       if(pid.value === doc.currentTurnId){
-         if(doc.nextTurn !== doc.totalPlayers -1){
-          turn = doc.nextTurn + 1
-          index = doc.currentTurnIndex + 1
+       if(pid.value === doc.currentTurnId){  // if id of player === current turn id. Ensures only current turn person can play card
+         if(doc.nextTurn !== doc.totalPlayers -1){ // if next turn index not equal to 3
+          turn = doc.nextTurn + 1   // the next turn is incremented by 1. if nextTurn hits 3 it doesnt execute.
+          index = doc.currentTurnIndex + 1 // index is incremented by 1
          }else{
-           turn = 0
+           turn = 0  // This resets to the first document 
            index = -1
          }
+        
+        if(doc.nextTurn -1 !== -1){
         gameRef.update({playZoneOccupied: false, playZoneCardId: {}, pollOpen: true,
         currentTurn:{index:index, nextTurn: turn,playerId:players[doc.nextTurn].id, 
         previousPlayerId: players[doc.nextTurn -1].id}})
+        }else{
+          gameRef.update({playZoneOccupied: false, playZoneCardId: {}, pollOpen: true,
+        currentTurn:{index:index, nextTurn: turn,playerId:players[doc.nextTurn].id, 
+        previousPlayerId: players[doc.totalPlayers -1].id}})
+        }
        }     
        clearInterval(decrementTimer)
        decrementTimerValue(10)
@@ -151,13 +161,30 @@ export default {
   }
   })
 
-  let pollYes = async () => {
+  let pollYes = async () => 
+  {
     console.log("Poll Yes")
-    let poll = {
+    let poll = 
+    {
       yes:document.value.poll.yes,
       no: document.value.poll.no
     }
-   await gameRef.update({poll:{yes:poll.yes + 1, no: poll.no}})
+  
+   for(let j=0; j < players.length; j++)
+   {
+     if(players[j].id === pid.value)
+     {
+        let player = 
+        {
+          pollSubbed: players[j].pollSubmitted
+        }
+       if(!player.pollSubbed)
+        {
+         //await subRef.doc(pid.value).update({pollSubmitted: true})
+         //await gameRef.update({poll:{yes:poll.yes + 1, no: poll.no}})
+        }
+     }
+    }
   }
 
   let pollNo = async () => {
@@ -166,7 +193,23 @@ export default {
       yes:document.value.poll.yes,
       no: document.value.poll.no
     }
-  await gameRef.update({poll:{no:poll.no + 1, yes: poll.yes}})
+   
+   for(let j=0; j < players.length; j++)
+   {
+     if(players[j].id === pid.value)
+     {
+        let player = 
+        {
+          pollSubbed: players[j].pollSubmitted
+        }
+        console.log("PLAYER SUBBED: " + player.pollSubbed)
+       if(!player.pollSubbed)
+        {
+          //await subRef.doc(pid.value).update({pollSubmitted: true})
+          //await gameRef.update({poll:{no:poll.no + 1, yes: poll.yes}})
+        }
+     }
+    }
   }
 
 
