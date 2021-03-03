@@ -94,6 +94,7 @@ export default {
       currentTurnIndex: document.value.currentTurn.index,
       currentTurnId: document.value.currentTurn.playerId,
       nextTurn: document.value.currentTurn.nextTurn,
+      previousTurn: document.value.currentTurn.previousPlayerId,
       totalPlayers: document.value.totalPlayers,
       yes: document.value.poll.yes,
       no: document.value.poll.no
@@ -103,10 +104,26 @@ export default {
     if(doc.currentTurnID === ""){
        gameRef.update({currentTurn: {playerId: players[0].id}})
     }
+    
 
     if(doc.yes + doc.no === doc.totalPlayers){
-      gameRef.update({ pollOpen: false})
+      if(doc.yes > doc.no){
+        for(let i=0; i < doc.totalPlayers; i++){
+          if(players[i].id === doc.currentTurnId){
+            console.log("PLAYERS: " +  players)
+            console.log("PLAYER ID: "  + players[i].id)
+            console.log("CURRENT TURN PLAYER ID: " + doc.currentTurnId)
+            let player = {
+              totalPoints: players[i].totalPoints
+            }
+            console.log("TOTAL POINTS" + player.totalPoints)
+           subRef.doc(doc.previousTurn).update({totalPoints: player.totalPoints + 1})
+          }
+        }
+      }
+      gameRef.update({ pollOpen: false, poll: {yes: 0, no: 0}})
     }
+
 
     if(doc.occupied){
    let decrementTimer = setInterval(() => {
@@ -122,7 +139,8 @@ export default {
            index = -1
          }
         gameRef.update({playZoneOccupied: false, playZoneCardId: {}, pollOpen: true,
-        currentTurn:{index:index, nextTurn: turn,playerId:players[doc.nextTurn].id}})
+        currentTurn:{index:index, nextTurn: turn,playerId:players[doc.nextTurn].id, 
+        previousPlayerId: players[doc.nextTurn -1].id}})
        }     
        clearInterval(decrementTimer)
        decrementTimerValue(10)
