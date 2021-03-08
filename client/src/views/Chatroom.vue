@@ -108,20 +108,25 @@ export default {
     //console.log("YES:" + doc.yes)
     console.log("FROM DOCUMENT: " + players)
    //console.log("PLAYERID: " + doc.currentTurnId)
-    // if(doc.currentTurnID === ""){
-    //    gameRef.update({currentTurn: {playerId: players[0].id}})
-    // }
+    if(doc.currentTurnID === ""){
+       gameRef.update({currentTurn: {playerId: players[0].id}})
+    }
     
    //Updates Points Total Of Player Who PLayed Card
     if(doc.yes + doc.no === doc.totalPlayers){ // if total votes === total players
        if(doc.yes > doc.no){ //if yes is greater than no
         if(pid.value === doc.previousTurn){
           subRef.doc(pid.value).update({totalPoints:increment})
-          gameRef.update({points:increment, pollOpen: false, poll: {yes: 0, no: 0}})
+          gameRef.update({pollOpen: false, poll: {yes: 0, no: 0}})
         }   
      }
+
+     for(let v=0; v < players.length; v++){
+        subRef.doc(players[v].id).update({pollSubmitted: false})
+      }
      players.splice(0,players.length)
      console.log("Players After Call To DB: " + players)
+
      }
     
 
@@ -174,24 +179,27 @@ export default {
        open: document.value.pollOpen
      }
   
-  //  for(let j=0; j < players.length; j++)
-  //  {
-  //    if(players[j].id === pid.value)
-  //    {
-  //       let player = 
-  //       {
-  //         pollSubbed: players[j].pollSubmitted
-  //       }
-  //      if(!player.pollSubbed)
-  //       {
-         //await subRef.doc(pid.value).update({pollSubmitted: true})
+   for(let j=0; j < players.length; j++)
+   {
+     if(players[j].id === pid.value)
+     {
+        let player = 
+        {
+          pollSubbed: players[j].pollSubmitted
+        }
+        if(!player.pollSubbed)
+         {
+         await subRef.doc(pid.value).update({pollSubmitted: true})
          if(pollOpen.open){
          await gameRef.update({poll:{yes:poll.yes +1, no: poll.no}})
+         players.splice(0,players.length)
+         console.log("Players After YES: " + players)
          }
         }
-   // }
-    //}
-  //}
+    }
+    }
+     
+  }
 
   let pollNo = async () => {
     console.log("Poll No")
@@ -202,25 +210,28 @@ export default {
     let pollOpen = {
        open: document.value.pollOpen
      }
-  //  for(let j=0; j < players.length; j++)
-  //  {
-  //    if(players[j].id === pid.value)
-  //    {
-  //       let player = 
-  //       {
-  //         pollSubbed: players[j].pollSubmitted
-  //       }
-  //       console.log("PLAYER SUBBED: " + player.pollSubbed)
-  //      if(!player.pollSubbed)
-  //       {
-         // await subRef.doc(pid.value).update({pollSubmitted: true})
+    for(let j=0; j < players.length; j++)
+    {
+      if(players[j].id === pid.value)
+     {
+         let player = 
+        {
+           pollSubbed: players[j].pollSubmitted
+        }
+         console.log("PLAYER SUBBED: " + player.pollSubbed)
+       if(!player.pollSubbed)
+         {
+          await subRef.doc(pid.value).update({pollSubmitted: true})
          if(pollOpen.open){
           await gameRef.update({poll:{no:poll.no + 1, yes: poll.yes}})
+          players.splice(0,players.length)
+          console.log("Players After NO: " + players)
         }
   }
-    // }
-   // }
- // }
+     }
+    }
+      
+  }
 
 
     // if the user value is ever null, redirect to welcome screen
