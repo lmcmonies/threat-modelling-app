@@ -46,6 +46,7 @@ export default {
   const {shuffleCards} = useMutations(['shuffleCards'])
   const {updatePlayerId} = useActions(['updatePlayerId'])
   const {updatePlayersCards} = useActions(['updatePlayersCards'])
+    const {updatePlayersArray} = useActions(['updatePlayersArray'])
 
   let documentId = route.params.id.toString()
   let collection = 'games'
@@ -107,7 +108,7 @@ let players = []
        }
      }
     }
-    
+         // updatePlayersArray(players)
     // let currentTurn = {
     //   turn: document.value.currentTurn
     // }
@@ -205,7 +206,8 @@ let players = []
        }
 
     for(let i=0; i < player.length; i++){
-      if(player[i] === game.currentPlayer && game.occupied === false && game.pollOpen === false){
+      if(player[i] === game.currentPlayer && game.occupied === false && game.pollOpen === false)
+      {
           console.log("Updating Play Zone")
           gameRef.update({playZoneCardId: data, playZoneOccupied: true})
       }
