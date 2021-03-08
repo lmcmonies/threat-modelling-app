@@ -25,7 +25,7 @@ import getDocument from '../composables/getDocument'
 import getSubCollection from '../composables/getSubCollection'
 import getSubSubCollection from '../composables/getSubSubCollection'
 import { computed, onUpdated, ref, watch } from 'vue'
-import {projectFirestore, aUnion, timestamp} from '../firebase/config'
+import {projectFirestore, aUnion, timestamp, decrement} from '../firebase/config'
 
 export default {
     setup(){
@@ -189,7 +189,8 @@ let players = []
       let game = {
         occupied: document.value.playZoneOccupied,
          currentPlayer: document.value.currentTurn.playerId,
-         pollOpen: document.value.pollOpen
+         pollOpen: document.value.pollOpen,
+         cardNum: document.value.totalCards
       }
       let data = {
         id: card.id,
@@ -207,7 +208,7 @@ let players = []
        }
 
     for(let i=0; i < player.length; i++){
-      if(player[i] === game.currentPlayer && game.occupied === false && game.pollOpen === false)
+      if(player[i] === game.currentPlayer && game.occupied === false && game.pollOpen === false && game.cardNum !== -1)
       {
         console.log("CARD ID: " + data.cardId)
           subRef.doc(player[i]).collection('cards').doc(data.cardId).delete().then(() => {
@@ -216,7 +217,7 @@ let players = []
            console.error("Error removing document: ", error);
           });
           console.log("Updating Play Zone")
-          gameRef.update({playZoneCardId: data, playZoneOccupied: true})
+          gameRef.update({playZoneCardId: data, playZoneOccupied: true, totalCards: game.cardNum -1})
           
 
       }

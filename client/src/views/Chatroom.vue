@@ -1,26 +1,27 @@
 <template>
   <div class="container">
     <Navbar />
-    <!-- <button class="button" @click="shuffle">Shuffle Cards</button> -->
-     <!-- <button class="button" @click="distribute">Distribute Cards</button> -->
-  
+    
      <div v-if="document.currentTurn.playerId === pid">
        <h1>Your Turn</h1>
           </div>
+          <button class="button3" @click="determineWinner">Reveal Results</button>
+    <div v-for="win in winner" v-bind:key="win.id">
+           <h1 >{{win.email + ": " + win.totalPoints + " points"}}</h1>
+        </div>  
      <div class="timer"><h1>Timer: {{timerVal}}</h1></div>
      <div class="poll"><h1>Is It A Valid Threat? </h1>
      <button class="button" @click="pollYes">Yes</button>
      <button class="button2" @click="pollNo">No</button>
      </div>
-  
+
+     
     <ChatBox class="chat-box"/>
     <PlayZone class="play-zone" />
      <HandArea class="hand-area"/>
   
-       <!-- <div v-for="card in shuffledCards" v-bind:key="card.id">
-           <img class="card" :src="card.src" />
-        </div>  
-     -->
+     
+     
   </div>
 </template>
  
@@ -31,7 +32,7 @@ import HandArea from '../components/HandArea'
 import ChatBox from '../components/ChatBox'
 import getUser from '../composables/getUser'
 import getSubCollection from '../composables/getSubCollection'
-import { watch, computed } from 'vue'
+import { watch, computed, ref} from 'vue'
 import { useRouter } from 'vue-router'
 import {useRoute} from 'vue-router'
 import {useStore} from 'vuex'
@@ -46,6 +47,8 @@ export default {
     const { user } = getUser()
       const store = useStore()
       const route = useRoute()
+
+       let winner = ref(null)
 
      let documentId= route.params.id.toString()
      let collection = 'games'
@@ -66,7 +69,7 @@ export default {
    
     let pid = computed(() => store.state.playerId ) 
    
-      let playersIds = computed(() => store.state.players)
+     // let playersIds = computed(() => store.state.players)
 
        let timerVal = computed(() => store.state.timerValue) 
        const {decrementTimerValue} = useActions(['decrementTimerValue'])
@@ -102,8 +105,12 @@ export default {
       totalPlayers: document.value.totalPlayers,
       yes: document.value.poll.yes,
       no: document.value.poll.no,
+      totalCards: document.value.totalCards,
+      gameFinished: document.value.gameFinished
       //playersPoints: document.value.playersPoints
     }
+
+ 
     //console.log("Players Points: " + doc.playersPoints)
     //console.log("YES:" + doc.yes)
     console.log("FROM DOCUMENT: " + players)
@@ -114,11 +121,13 @@ export default {
     
    //Updates Points Total Of Player Who PLayed Card
     if(doc.yes + doc.no === doc.totalPlayers){ // if total votes === total players
-       if(doc.yes > doc.no){ //if yes is greater than no
-        if(pid.value === doc.previousTurn){
+       if(pid.value === doc.previousTurn){
+        if(doc.yes > doc.no){ //if yes is greater than no
           subRef.doc(pid.value).update({totalPoints:increment})
           gameRef.update({pollOpen: false, poll: {yes: 0, no: 0}})
-        }   
+        }else{
+          gameRef.update({pollOpen: false, poll: {yes: 0, no: 0}})
+        }
      }
 
      for(let v=0; v < players.length; v++){
@@ -127,7 +136,10 @@ export default {
      players.splice(0,players.length)
      console.log("Players After Call To DB: " + players)
 
-     }
+      if(doc.totalCards === 0)
+      gameRef.update({gameFinished:true})
+
+      }
     
 
    //Updates currentTurn
@@ -167,6 +179,29 @@ export default {
   }
   })
 
+  let determineWinner = async () =>{
+    console.log("WINNER")
+    let doc = {
+      gameFinished: document.value.gameFinished
+    }
+       if(doc.gameFinished === true){
+      let scores = []
+      for(let u=0; u < players.length; u++){
+        let data = {
+          email:players[u].email,
+          totalPoints: players[u].totalPoints,
+          id:players[u].id
+        }
+        scores.push(data)
+      }
+
+      for(let t=0; t < scores.length; t++){
+        console.log(scores[t].email + ": " + scores[t].totalPoints +" points")
+      }
+      winner.value = scores
+    }
+  }
+
   let pollYes = async () => 
   {
     console.log("Poll Yes")
@@ -178,7 +213,10 @@ export default {
      let pollOpen = {
        open: document.value.pollOpen
      }
-  
+   let totalCards = {
+       cards: document.value.totalCards
+     }
+     if(totalCards.cards !== -1){
    for(let j=0; j < players.length; j++)
    {
      if(players[j].id === pid.value)
@@ -198,7 +236,7 @@ export default {
         }
     }
     }
-     
+     }
   }
 
   let pollNo = async () => {
@@ -210,6 +248,11 @@ export default {
     let pollOpen = {
        open: document.value.pollOpen
      }
+
+     let totalCards = {
+       cards: document.value.totalCards
+     }
+     if(totalCards.cards !== -1){
     for(let j=0; j < players.length; j++)
     {
       if(players[j].id === pid.value)
@@ -230,6 +273,7 @@ export default {
   }
      }
     }
+     }
       
   }
 
@@ -241,7 +285,7 @@ export default {
       }
     })
 
-    return {shuffledCards, distribute, timerVal, document, error, documents, err, pid, pollYes, pollNo}
+    return {shuffledCards, distribute, timerVal, document, error, documents, err, pid, pollYes, pollNo, determineWinner, winner}
   }
 }
 </script>
@@ -286,6 +330,23 @@ export default {
 }
 .button2:hover{
   background-color: red;
+     font-family: 'Courier New';
+}
+.button3 {
+  font-family: 'Courier New';
+  font-size: 30px;
+  border-radius: 4px;
+  font-family: 'Courier New';
+  background-color: white; 
+  color: black; 
+  border: 2px solid hotpink;
+  width: 15%;
+  padding: 14px 20px;
+  margin: 8px 0;
+  cursor: pointer;
+}
+.button3:hover{
+  background-color:hotpink;
      font-family: 'Courier New';
 }
 .hand-area{
