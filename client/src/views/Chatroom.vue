@@ -113,11 +113,14 @@ export default {
  
     //console.log("Players Points: " + doc.playersPoints)
     //console.log("YES:" + doc.yes)
-    console.log("FROM DOCUMENT: " + players)
-   //console.log("PLAYERID: " + doc.currentTurnId)
-    if(doc.currentTurnID === ""){
-       gameRef.update({currentTurn: {playerId: players[0].id}})
-    }
+  //   console.log("FROM DOCUMENT: " + players)
+  //   //console.log("PLAYER" + players.value[0].id)
+  //  console.log("PLAYERID: " + doc.currentTurnId)
+  //   if(doc.currentTurnId === "undefined"){
+  //     let player = players[0].id
+  //     console.log("PLAYER" + player)
+  //      gameRef.update({currentTurn: {playerId: player}})
+  //   }
     
    //Updates Points Total Of Player Who PLayed Card
     if(doc.yes + doc.no === doc.totalPlayers){ // if total votes === total players

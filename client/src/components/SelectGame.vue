@@ -6,9 +6,9 @@
       <label class="label" for="players">Players:</label>
       <select name="players" v-model="totalPlayers" id="players" required>
        <option class="option" value="3">3</option>
-       <option class ="option" value="4">4</option>
+       <!-- <option class ="option" value="4">4</option>
        <option class="option" value="5">5</option>
-       <option class="option" value="6">6</option>
+       <option class="option" value="6">6</option> -->
      </select>
     <button class="button" @click="createGame">Create</button>
     </section>
@@ -50,7 +50,9 @@ var docRef = projectFirestore.collection('games');
    let uid = uuid();
    let id = uid
    let newGame = {gameName: `${gameName.value}`, totalPlayers: parseInt(`${totalPlayers.value}`), 
-   currentTurn: {index:0, nextTurn:1, playerId:"", previousPlayerId: ""}, playZoneCardId: "", playZoneOccupied: "", playersJoined: 0, isGameActive: false, totalCards: 0, createdAt: timestamp() };
+   currentTurn: {index:0, nextTurn:1, playerId:"", previousPlayerId: ""}, 
+   playZoneCardId: {}, poll:{no:0, yes:0}, playZoneOccupied: false, playersJoined: 0, isGameActive: false, 
+   totalCards: 9, createdAt: timestamp(), gameFinished: false, pollOpen: false };
    updateGameId(id);
    await docRef.doc(id).set(newGame);
    await createPlayersSubCollection(id)

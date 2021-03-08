@@ -98,7 +98,7 @@ let players = []
      for(let x=0; x< playerIds.length; x++){
        players.push(playerIds[x].id)
        //playersComplete.push(playerIds[x])
-      // console.log("Players Array: " + players[x])
+        console.log("Players Array: " + players[x])
      //  console.log("Players Complete: " + playersComplete[x])
 
        for(let i=0; i < documents.value.length; i++){
@@ -138,13 +138,13 @@ let players = []
      let cardDistribution = numOfCards / totalPlayers
      //console.log("Card Distribution: " + cardDistribution)
 
-      let min = 0
+     let min = 0
      let max = cardDistribution
     
     let cardGenerator = () => {
         let cardIds = []
-         console.log("Min: " + min)
-          console.log("Max: " + max)
+        console.log("Min: " + min)
+        console.log("Max: " + max)
       
       for(let i = min; i<max; i++)
       {
@@ -160,7 +160,8 @@ let players = []
 
    for (let i=0; i < players.length; i++){
         let cardIds = cardGenerator()
-         for (let x=0; x < cardDistribution; x++){
+        console.log(cardIds)
+         for (let x=0; x < cardIds.length; x++){
           subRef.doc(players[i]).collection('cards').add(cardIds[x])
         }
      }
@@ -208,7 +209,7 @@ let players = []
        }
 
     for(let i=0; i < player.length; i++){
-      if(player[i] === game.currentPlayer && game.occupied === false && game.pollOpen === false && game.cardNum !== -1)
+      if(player[i] === game.currentPlayer && game.occupied === false && game.pollOpen === false && game.cardNum !== 0)
       {
         console.log("CARD ID: " + data.cardId)
           subRef.doc(player[i]).collection('cards').doc(data.cardId).delete().then(() => {
