@@ -20,14 +20,14 @@ export default createStore({
       {id: 6, src: require('../assets/EoPCards/Suits/DenialofService/7DenialofService.png')},
       {id: 7, src: require('../assets/EoPCards/Suits/DenialofService/8DenialofService.png')},
       {id: 8, src: require('../assets/EoPCards/Suits/DenialofService/9DenialofService.png')},
-      {id: 9, src: require('../assets/EoPCards/Suits/DenialofService/10DenialofService.png')},
-      {id: 10, src: require('../assets/EoPCards/Suits/DenialofService/ADenialofService.png')},
-      {id: 11, src: require('../assets/EoPCards/Suits/DenialofService/JDenialofService.png')},
-      {id: 12, src: require('../assets/EoPCards/Suits/DenialofService/KDenialofService.png')},
-      {id: 13, src: require('../assets/EoPCards/Suits/DenialofService/QDenialofService.png')},
-      {id: 14, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/5ElevationofPrivilege.png')},
-      {id: 15, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/6ElevationofPrivilege.png')},
-      {id: 16, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/7ElevationofPrivilege.png')}
+      {id: 9, src: require('../assets/EoPCards/Suits/DenialofService/10DenialofService.png')}
+      // {id: 10, src: require('../assets/EoPCards/Suits/DenialofService/ADenialofService.png')},
+      // {id: 11, src: require('../assets/EoPCards/Suits/DenialofService/JDenialofService.png')},
+      // {id: 12, src: require('../assets/EoPCards/Suits/DenialofService/KDenialofService.png')},
+      // {id: 13, src: require('../assets/EoPCards/Suits/DenialofService/QDenialofService.png')},
+      // {id: 14, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/5ElevationofPrivilege.png')},
+      // {id: 15, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/6ElevationofPrivilege.png')},
+      // {id: 16, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/7ElevationofPrivilege.png')}
     ],
     shuffledCardsArray: [],
     players: [],

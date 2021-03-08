@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Navbar />
-    
+        <ChatBox class="chat-box"/>
      <div v-if="document.currentTurn.playerId === pid">
        <h1>Your Turn</h1>
           </div>
@@ -16,7 +16,7 @@
      </div>
 
      
-    <ChatBox class="chat-box"/>
+
     <PlayZone class="play-zone" />
      <HandArea class="hand-area"/>
   

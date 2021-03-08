@@ -13,18 +13,24 @@
 
 <script>
 import {formatDistanceToNow} from 'date-fns'
-import getCollection from '../composables/getCollection'
+import getMessages from '../composables/getMessages'
 import { computed, onUpdated, ref } from 'vue'
+import {useRoute} from 'vue-router'
 
 export default {
 setup(){
-    const { error, documents } = getCollection('messages')
+     const route = useRoute()
+     let gameId = route.params.id.toString()
+     let subCollection = 'messages'
+     let collection = 'games'
+    const { error, documents } = getMessages(collection, gameId, subCollection)
 
     const formattedDocuments = computed(() => {
      if(documents.value){
          return documents.value.map(doc => {
-             let time = formatDistanceToNow(doc.createdAt.toDate())
-             return {...doc, createdAt: time }
+            // let time = formatDistanceToNow(doc.createdAt.toDate())
+             return {...doc, //createdAt: time
+              }
          })
      }
     })

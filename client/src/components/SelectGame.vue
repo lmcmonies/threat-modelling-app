@@ -54,11 +54,15 @@ var docRef = projectFirestore.collection('games');
    updateGameId(id);
    await docRef.doc(id).set(newGame);
    await createPlayersSubCollection(id)
+   await createMessagesSubCollection(id)
    router.push({name: 'chatroom', params:{id: id}})
  }
 
  const createPlayersSubCollection = async (id) => {
     docRef.doc(id).collection('players')
+ }
+ const createMessagesSubCollection = async (id) => {
+    docRef.doc(id).collection('messages')
  }
 
 const joinGame = async () =>{

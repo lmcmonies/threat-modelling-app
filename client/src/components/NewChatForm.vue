@@ -15,18 +15,22 @@
 import { ref } from 'vue'
 import getUser from '../composables/getUser'
 import { timestamp } from '../firebase/config'
-import useCollection from '../composables/useCollection'
+import useSubCollection from '../composables/useSubCollection'
 import ChatWindow from '../components/ChatWindow.vue'
-
+import {useRoute} from 'vue-router'
 export default {
     components:{
      ChatWindow
     },
     setup(){
         
+         const route = useRoute()
+         let gameId = route.params.id.toString()
+         let subCollection = 'messages'
+         let collection = 'games'
 
         const { user } = getUser()
-        const {addDoc, error} = useCollection('messages')
+        const {addDoc, error} = useSubCollection(collection, gameId, subCollection)
 
         const message = ref('')
 
