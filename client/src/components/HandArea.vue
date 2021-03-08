@@ -193,7 +193,8 @@ let players = []
       }
       let data = {
         id: card.id,
-        src:card.src
+        src:card.src,
+        cardId: card.cardId
       }
       let pid = computed(() => store.state.playerId ) 
        for(let x=0; x < players.length; x++){
@@ -208,8 +209,16 @@ let players = []
     for(let i=0; i < player.length; i++){
       if(player[i] === game.currentPlayer && game.occupied === false && game.pollOpen === false)
       {
+        console.log("CARD ID: " + data.cardId)
+          subRef.doc(player[i]).collection('cards').doc(data.cardId).delete().then(() => {
+           console.log("Document successfully deleted!");
+          }).catch((error) => {
+           console.error("Error removing document: ", error);
+          });
           console.log("Updating Play Zone")
           gameRef.update({playZoneCardId: data, playZoneOccupied: true})
+          
+
       }
     }
     }
