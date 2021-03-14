@@ -1,18 +1,8 @@
 <template>
-  <div class="hand-area">
-      <!-- <div v-for="card in playersCardsArray" v-bind:key="card.id">
-            <figure><img class="card" :src="card.src" @click="transferCard(card)" /></figure>
-           
-      </div> -->
-      <!-- <button class="button" @click="showResult">Show Result</button>  -->
+  <div class="handArea">
         <div v-for="card in pCards" v-bind:key="card.id">
            <figure><img class="card" :src="card.src" @click="updatePlayZone(card)"/></figure>
-
         </div> 
-      <!-- <div v-for="doc in documents" :key="doc.id" class="single">
-            <span class="playersJoined">{{doc.id}}</span>
-            <span class="totalPLayers">{{doc}}</span> 
-        </div>  -->
   </div>
 </template>
 
@@ -260,10 +250,10 @@ let players = []
 </script>
 
 <style scoped>
-.hand-area{
+.handArea{
  background-color: rgb(22, 22, 22);
-  height:30%;   
-  width: 90%;
+  height:50%;   
+  width: 58%;
   font-family: 'Trebuchet MS';
   background-position: bottom;
   background-repeat: no-repeat;
@@ -274,6 +264,10 @@ let players = []
   overflow: auto;
   padding-bottom: 10px;
   margin-bottom: 10px;
+     /* position: absolute; */
+    /* bottom: 0; */
+    left: 0; 
+  
   /* position: relative;
     top: 100%;
     left: 50%;
@@ -297,13 +291,13 @@ let players = []
         word-wrap: normal;
      
 }
-.hand-area figure img {
+.handArea figure img {
 	-webkit-transform: scale(1);
 	transform: scale(1);
 	-webkit-transition: .3s ease-in-out;
 	transition: .3s ease-in-out;
 }
-.hand-area figure:hover img {
+.handArea figure:hover img {
 	-webkit-transform: scale(1.1);
 	transform: scale(1.1);
      opacity: 50%;

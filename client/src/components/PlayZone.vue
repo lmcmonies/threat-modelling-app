@@ -1,5 +1,5 @@
 <template>
-  <div class='play-zone'>
+  <div class='playZone'>
 
     <div v-for="c in card" v-bind:key="c.id">
       <div v-if="c.id !== undefined">
@@ -60,10 +60,10 @@ setup(){
 </script>
 
 <style scoped>
-.play-zone{
+.playZone{
 
-  height:20%;   
-  width: 25%;
+  height:50%;   
+  width: 29.5%;
   font-family: 'Courier New';
   background-position: bottom;
   background-repeat: no-repeat;
@@ -77,11 +77,12 @@ setup(){
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%); */
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    margin-bottom: 10px;
-    margin-right: 30px;
+    position: absolute;
+    /* bottom: 0; */
+    right: 0; 
+    margin-right: 10px;
+    /* /* margin-bottom: 10px;
+    margin-right: 30px; */
 
     
 }
@@ -96,13 +97,13 @@ setup(){
         word-wrap: normal;
      
 }
-.play-zone figure img {
+.playZone figure img {
 	-webkit-transform: scale(1);
 	transform: scale(1);
 	-webkit-transition: .3s ease-in-out;
 	transition: .3s ease-in-out;
 }
-.play-zone figure:hover img {
+.playZone figure:hover img {
 	-webkit-transform: scale(1.1);
 	transform: scale(1.1);
      opacity: 50%;

@@ -1,11 +1,12 @@
 <template>
   <div class="container">
-    <HandArea class="hand-area"/>
-    <PlayZone class="play-zone"/>
+    
+
     <Navbar/>
     <ChatBox class="chat-box"/>
+
     
-     <div v-if="document.currentTurn.playerId === pid && document.pollOpen === false">
+     <div v-if="document.currentTurn.playerId === pid && document.pollOpen === false && document.gameFinished === false">
        <h1 class="h1">Your Turn</h1>
           </div>
           <div v-if="document.gameFinished === true">
@@ -14,8 +15,8 @@
     <div v-for="win in winner" v-bind:key="win.id">
            <h1 >{{win.email + ": " + win.totalPoints + " points"}}</h1>
         </div>  
-     <div v-if="document.pollOpen === false">  
-     <div class="timer"><h1><i class="fas fa-stopwatch"></i>{{timerVal}}</h1></div>
+     <div v-if="document.pollOpen === false && document.gameFinished === false ">  
+     <div class="timer"><h1><img class="stop-watch" src="../assets/stop-watch.png" alt="Stop Watch: ">{{timerVal}}</h1></div>
      </div>
      <div v-if="document.pollOpen === true">
      <div class="poll"><h1>Is It A Valid Threat? </h1>
@@ -23,7 +24,12 @@
      <button class="button2" @click="pollNo">No</button>
      </div>
      </div>
- 
+    <br>
+    <br>
+    <br>
+    <br>
+        <PlayZone/>
+        <HandArea/>
  
   
      
@@ -366,13 +372,13 @@ export default {
 .hand-area{
    position: fixed;
    bottom: 0;
-    height: 49%;
-    width: 55%;
+    height: 100%;
+    width: 58%;
 }
 .play-zone{
    position: fixed;
-   
-    height: 52%;
+    bottom: 0;
+    height: 100%;
     width: 21%;
 }
 .chat-box{
@@ -383,7 +389,7 @@ export default {
 .timer{
    border: 2px solid #4CAF50;
    border-radius: 4px;
-   width: 15%;
+   width: 10%;
    color: hotpink;
     margin-top: 10px;
  
@@ -392,5 +398,9 @@ export default {
 .poll{
 width: 40%;
 display:inline-block;
+}
+
+.stop-watch{
+  height: 70px;
 }
 </style>
