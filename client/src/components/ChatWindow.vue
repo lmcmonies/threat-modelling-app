@@ -50,6 +50,7 @@ setup(){
 .chat-window{
      overflow-y: auto;
     overflow-x:hidden;
+    background-color: rgb(22, 22, 22);
 }
 .name{
 font-family: 'Courier New';

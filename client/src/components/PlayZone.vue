@@ -67,16 +67,21 @@ setup(){
   font-family: 'Courier New';
   background-position: bottom;
   background-repeat: no-repeat;
-  background-color: #ffffff;
+  background-color: rgb(22, 22, 22);
   border-radius: 8px;
   border: 2px solid hotpink;
   display: block;
   overflow: auto;
-  position: relative;
+  /* position: relative;
     top: 50%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 10px;
+    margin-right: 30px;
 
     
 }

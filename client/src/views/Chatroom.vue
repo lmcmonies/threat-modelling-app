@@ -1,24 +1,30 @@
 <template>
   <div class="container">
-    <Navbar />
-        <ChatBox class="chat-box"/>
-     <div v-if="document.currentTurn.playerId === pid">
-       <h1>Your Turn</h1>
+    <HandArea class="hand-area"/>
+    <PlayZone class="play-zone"/>
+    <Navbar/>
+    <ChatBox class="chat-box"/>
+    
+     <div v-if="document.currentTurn.playerId === pid && document.pollOpen === false">
+       <h1 class="h1">Your Turn</h1>
           </div>
+          <div v-if="document.gameFinished === true">
           <button class="button3" @click="determineWinner">Reveal Results</button>
+          </div>
     <div v-for="win in winner" v-bind:key="win.id">
            <h1 >{{win.email + ": " + win.totalPoints + " points"}}</h1>
         </div>  
-     <div class="timer"><h1>Timer: {{timerVal}}</h1></div>
+     <div v-if="document.pollOpen === false">  
+     <div class="timer"><h1><i class="fas fa-stopwatch"></i>{{timerVal}}</h1></div>
+     </div>
+     <div v-if="document.pollOpen === true">
      <div class="poll"><h1>Is It A Valid Threat? </h1>
      <button class="button" @click="pollYes">Yes</button>
      <button class="button2" @click="pollNo">No</button>
      </div>
-
-     
-
-    <PlayZone class="play-zone" />
-     <HandArea class="hand-area"/>
+     </div>
+ 
+ 
   
      
      
@@ -294,10 +300,15 @@ export default {
 </script>
 
 <style scoped>
+.h1{
+  font-family: 'Courier New';
+}
 
 .container{
-   overflow-y: auto;
+    overflow-y: auto;
     font-family: 'Courier New';
+    background-color: rgb(22, 22, 22);
+    color: white;
 }
 
  .button {
@@ -305,8 +316,8 @@ export default {
   font-size: 30px;
   border-radius: 4px;
   font-family: 'Courier New';
-  background-color: white; 
-  color: black; 
+    background-color: rgb(22, 22, 22);
+  color: white;
   border: 2px solid #4CAF50;
   width: 15%;
   padding: 14px 20px;
@@ -323,8 +334,8 @@ export default {
   font-size: 30px;
   border-radius: 4px;
   font-family: 'Courier New';
-  background-color: white; 
-  color: black; 
+ background-color: rgb(22, 22, 22);
+  color: white;
   border: 2px solid red;
   width: 15%;
   padding: 14px 20px;
@@ -355,8 +366,8 @@ export default {
 .hand-area{
    position: fixed;
    bottom: 0;
-    height: 55%;
-    width: 80%;
+    height: 49%;
+    width: 55%;
 }
 .play-zone{
    position: fixed;

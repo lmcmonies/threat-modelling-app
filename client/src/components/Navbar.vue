@@ -97,20 +97,20 @@ export default {
   nav p {
     margin: 2px auto;
     font-size: 20px;
-    color: #444;
+    color: rgb(255, 255, 255);
     font-family: 'Courier New';
   }
   nav p.email {
     font-size: 14px;
-    color: #999;
+    color: rgb(255, 255, 255);
   }
   .button {
   font-family: 'Courier New';
   font-size: 30px;
   border-radius: 4px;
   font-family: 'Courier New';
-  background-color: white; 
-  color: black; 
+  background-color: rgb(22, 22, 22); 
+  color:white; 
   border: 2px solid #4CAF50;
   width: 100%;
   padding: 14px 20px;

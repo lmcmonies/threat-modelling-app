@@ -261,24 +261,24 @@ let players = []
 
 <style scoped>
 .hand-area{
-
-  height:70%;   
+ background-color: rgb(22, 22, 22);
+  height:30%;   
   width: 90%;
   font-family: 'Trebuchet MS';
   background-position: bottom;
   background-repeat: no-repeat;
-  background-color: #ffffff;
+
   border-radius: 8px;
   border: 2px solid #4CAF50;
   display: block;
   overflow: auto;
   padding-bottom: 10px;
   margin-bottom: 10px;
-  position: relative;
+  /* position: relative;
     top: 100%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
 
     
 }

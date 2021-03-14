@@ -72,6 +72,8 @@ textarea {
     outline: none;
     resize: none;
     border: 2px solid hotpink;
+    background-color: rgb(22, 22, 22);
+    color: white;
 }
 
 </style>

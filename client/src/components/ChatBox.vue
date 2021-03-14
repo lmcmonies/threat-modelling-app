@@ -19,6 +19,7 @@ export default {
 <style>
 
 .chatbox{
+    background-color: rgb(22, 22, 22);
     border-radius: 4px;
     border: 2px solid cyan;
     width: 30%;
