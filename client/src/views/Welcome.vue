@@ -35,6 +35,9 @@ export default {
 
 <style scoped>
   .welcome {
+    
+  
+
     font-family: 'Courier New';
     text-align: center;
     padding: 20px 0;

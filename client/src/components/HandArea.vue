@@ -300,7 +300,7 @@ let players = []
 .handArea figure:hover img {
 	-webkit-transform: scale(1.1);
 	transform: scale(1.1);
-     opacity: 50%;
+   
 }
 .button {
   font-family: 'Courier New';

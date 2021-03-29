@@ -24,6 +24,7 @@ export default {
 </script>
 
 <style scoped>
+
 .button{
   width:30%;
   font-size: 50px;

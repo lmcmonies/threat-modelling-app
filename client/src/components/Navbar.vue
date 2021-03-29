@@ -16,10 +16,11 @@
      
       
       
-   <!-- <div v-if="!isReady">
+  
+    <div>
+       <!-- <div v-if="!isReady">
      <button  class="button" v-on:click="isReady=!isReady" v-bind:class="{isReady: isReady}" @click="readyToPlay">Ready?</button>
     </div> -->
-    <div>
        <div>
     </div>
     <button class="button" @click="handleClick">Logout</button>
