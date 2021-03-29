@@ -2,27 +2,34 @@
   
 <template>
   <nav v-if="user">
-    <div>
-      <p>Playing as {{ user.displayName }}</p>
-       <button class="button" @click="handleClick">Logout</button>
-
-    </div>
+  
      <div class="title-container">
       <h1>Elevation of Privilege</h1>
      
         
       </div>
-    
+        <div>
+      <p>Playing as {{ user.displayName }}</p>
+       
+
+    </div>
+     
       
       
-   <div v-if="!isReady">
+   <!-- <div v-if="!isReady">
      <button  class="button" v-on:click="isReady=!isReady" v-bind:class="{isReady: isReady}" @click="readyToPlay">Ready?</button>
+    </div> -->
+    <div>
+       <div>
+    </div>
+    <button class="button" @click="handleClick">Logout</button>
     </div>
   </nav>
 </template>
 
 <script>
 import {computed} from 'vue'
+
 import useLogout from '../composables/useLogout'
 import getUser from '../composables/getUser'
 import {projectFirestore, aUnion, increment} from '../firebase/config'
@@ -31,6 +38,7 @@ import {ref} from 'vue'
 import {useRoute} from 'vue-router'
 import {useStore} from 'vuex'
 export default {
+
   setup() {
     const { logout, error } = useLogout()
     const { user } = getUser()
@@ -59,6 +67,7 @@ export default {
 
         
     const handleClick = async () => {
+      
       await logout()
     }
 
@@ -116,6 +125,7 @@ export default {
   padding: 14px 20px;
   margin: 8px 0;
   cursor: pointer;
+  float: right;
 }
 .button:hover{
   background-color: #45a049;
@@ -133,7 +143,7 @@ export default {
   }
  
    .isReady{
-     font-family: 'Courier New';
+  font-family: 'Courier New';
   font-size: 30px;
   border-radius: 4px;
   font-family: 'Courier New';
@@ -143,7 +153,7 @@ export default {
   padding: 14px 20px;
   margin: 8px 0;
   cursor: pointer;
- border: 2px solid #4CAF50;
+  border: 2px solid #4CAF50;
   }
 
 

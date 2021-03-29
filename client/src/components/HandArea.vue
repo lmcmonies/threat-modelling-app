@@ -54,14 +54,14 @@ export default {
 
   const {cards, cardsError} = setTimeout(async () =>{ 
       let pid = computed(() => store.state.playerId ) 
-       console.log("RETRIEVING PID: " + pid.value)
+      //  console.log("RETRIEVING PID: " + pid.value)
        const {cards, cardsError} = await getSubSubCollection(collection, documentId, subCollection, pid.value,subSubCollection ) 
        
        watch(cards, async () => {
          let playersCards = []
        for(let i=0; i< cards.value.length; i++){
          playersCards.push(cards.value[i])
-         console.log("CARD: " + cards.value[i].id)
+        //  console.log("CARD: " + cards.value[i].id)
        }
        updatePlayersCards(playersCards)
        })
@@ -88,7 +88,7 @@ let players = []
      for(let x=0; x< playerIds.length; x++){
        players.push(playerIds[x].id)
        //playersComplete.push(playerIds[x])
-        console.log("Players Array: " + players[x])
+        // console.log("Players Array: " + players[x])
      //  console.log("Players Complete: " + playersComplete[x])
 
        for(let i=0; i < documents.value.length; i++){
@@ -133,12 +133,12 @@ let players = []
     
     let cardGenerator = () => {
         let cardIds = []
-        console.log("Min: " + min)
-        console.log("Max: " + max)
+        // console.log("Min: " + min)
+        // console.log("Max: " + max)
       
       for(let i = min; i<max; i++)
       {
-       console.log("Card ID: " + shuffledCards.value[i].id)
+      //  console.log("Card ID: " + shuffledCards.value[i].id)
        cardIds.push(shuffledCards.value[i])
       }
 
@@ -150,7 +150,7 @@ let players = []
 
    for (let i=0; i < players.length; i++){
         let cardIds = cardGenerator()
-        console.log(cardIds)
+        // console.log(cardIds)
          for (let x=0; x < cardIds.length; x++){
           subRef.doc(players[i]).collection('cards').add(cardIds[x])
         }
@@ -159,7 +159,7 @@ let players = []
  }
 
   watch(document, async () => {
-    console.log("GAME")
+    // console.log("GAME")
  
        let data = {
           playersJoined: document.value.playersJoined,
@@ -191,7 +191,7 @@ let players = []
       let pid = computed(() => store.state.playerId ) 
        for(let x=0; x < players.length; x++){
         // console.log("PLAYERS: " + players[x])
-         console.log(pid.value)
+        //  console.log(pid.value)
          if(pid.value === players[x]){
            //console.log("PID: " + pid.value + "ID: " + players[x])
            player.push(players[x])
@@ -203,11 +203,11 @@ let players = []
       {
         console.log("CARD ID: " + data.cardId)
           subRef.doc(player[i]).collection('cards').doc(data.cardId).delete().then(() => {
-           console.log("Document successfully deleted!");
+          //  console.log("Document successfully deleted!");
           }).catch((error) => {
            console.error("Error removing document: ", error);
           });
-          console.log("Updating Play Zone")
+          // console.log("Updating Play Zone")
           gameRef.update({playZoneCardId: data, playZoneOccupied: true, totalCards: game.cardNum -1})
           
 

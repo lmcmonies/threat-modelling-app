@@ -102,7 +102,7 @@ export default {
        players.push(playerIds[x])
      }
     }
-    console.log("FROM DOCUMENTS: "  +players)
+    // console.log("FROM DOCUMENTS: "  +players)
   })
 
 
@@ -149,7 +149,7 @@ export default {
         subRef.doc(players[v].id).update({pollSubmitted: false})
       }
      players.splice(0,players.length)
-     console.log("Players After Call To DB: " + players)
+    //  console.log("Players After Call To DB: " + players)
 
       if(doc.totalCards === 0)
       gameRef.update({gameFinished:true})
@@ -186,7 +186,7 @@ export default {
         }
        }     
        clearInterval(decrementTimer)
-       decrementTimerValue(10)
+       decrementTimerValue(30)
      }else{
        decrementTimerValue(timerVal.value -1)
      }
@@ -211,7 +211,7 @@ export default {
       }
 
       for(let t=0; t < scores.length; t++){
-        console.log(scores[t].email + ": " + scores[t].totalPoints +" points")
+        // console.log(scores[t].email + ": " + scores[t].totalPoints +" points")
       }
       winner.value = scores
     }
@@ -246,7 +246,7 @@ export default {
          if(pollOpen.open){
          await gameRef.update({poll:{yes:poll.yes +1, no: poll.no}})
          players.splice(0,players.length)
-         console.log("Players After YES: " + players)
+        //  console.log("Players After YES: " + players)
          }
         }
     }
@@ -283,7 +283,7 @@ export default {
          if(pollOpen.open){
           await gameRef.update({poll:{no:poll.no + 1, yes: poll.yes}})
           players.splice(0,players.length)
-          console.log("Players After NO: " + players)
+          // console.log("Players After NO: " + players)
         }
   }
      }
@@ -387,7 +387,7 @@ export default {
 }
 
 .timer{
-   border: 2px solid #4CAF50;
+   border: 2px solid cyan;
    border-radius: 4px;
    width: 10%;
    color: hotpink;

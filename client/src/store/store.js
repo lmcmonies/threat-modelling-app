@@ -8,7 +8,7 @@ export default createStore({
   state: {
     gameId: '',
     playerId: '',
-    timerValue: 10,
+    timerValue: 30,
     playersCards: [],
     allCardsArray: 
     [

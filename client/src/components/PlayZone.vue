@@ -49,8 +49,8 @@ setup(){
   
    card.value = result
 
-  console.log(subData.src)
-  console.log(subData)
+  // console.log(subData.src)
+  // console.log(subData)
 
   })
 

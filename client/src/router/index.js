@@ -8,24 +8,33 @@ import { projectAuth } from '../firebase/config'
 // auth guards
 const requireAuth = (to, from, next) => {
   let user = projectAuth.currentUser
-  console.log('current user in auth guard: ', user)
   if (!user) {
-    next({ name: 'Welcome' })
+    next({name: 'landing'})
   } else {
     next()
   }
 }
 
+// const reuireNoAuth = (to, from, next) => {
+//   let user = projectAuth.currentUser
+//   if (user) {
+//     next({name: 'chatroom'})
+//   } else {
+//     next()
+//   }
+// }
+
 const routes = [
  {
    path: '/',
-   name: 'Landing',
-   component: Landing
+   name: 'landing',
+   component: Landing,
  },
  {
   path: '/welcome',
   name: 'welcome',
-  component: Welcome
+  component: Welcome,
+ 
 },
 {
   path: '/create',
