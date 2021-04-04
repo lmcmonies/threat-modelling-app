@@ -12,15 +12,15 @@ export default createStore({
     playersCards: [],
     allCardsArray: 
     [
-      {id: 1, src: require('../assets/EoPCards/Suits/DenialofService/2DenialofService.png')},
-      {id: 2, src: require('../assets/EoPCards/Suits/DenialofService/3DenialofService.png')},
-      {id: 3, src: require('../assets/EoPCards/Suits/DenialofService/4DenialofService.png')},
-      {id: 4, src: require('../assets/EoPCards/Suits/DenialofService/5DenialofService.png')},
-      {id: 5, src: require('../assets/EoPCards/Suits/DenialofService/6DenialofService.png')},
-      {id: 6, src: require('../assets/EoPCards/Suits/DenialofService/7DenialofService.png')},
-      {id: 7, src: require('../assets/EoPCards/Suits/DenialofService/8DenialofService.png')},
-      {id: 8, src: require('../assets/EoPCards/Suits/DenialofService/9DenialofService.png')},
-      {id: 9, src: require('../assets/EoPCards/Suits/DenialofService/10DenialofService.png')}
+      {id: 1, src: require('../assets/EoPCards/Suits/Spoofing/7Spoofing.png')},
+      {id: 2, src: require('../assets/EoPCards/Suits/Tampering/10Tampering.png')},
+      {id: 3, src: require('../assets/EoPCards/Suits/Spoofing/KSpoofing.png')},
+      {id: 4, src: require('../assets/EoPCards/Suits/Tampering/3Tampering.png')},
+      {id: 5, src: require('../assets/EoPCards/Suits/Repudiation/4Repudiation.png')},
+      {id: 6, src: require('../assets/EoPCards/Suits/InformationDisclosure/7InformationDisclosure.png')},
+      {id: 7, src: require('../assets/EoPCards/Suits/InformationDisclosure/QInformationDisclosure.png')},
+      {id: 8, src: require('../assets/EoPCards/Suits/DenialofService/KDenialofService.png')},
+      {id: 9, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/JElevationofPrivilege.png')}
       // {id: 10, src: require('../assets/EoPCards/Suits/DenialofService/ADenialofService.png')},
       // {id: 11, src: require('../assets/EoPCards/Suits/DenialofService/JDenialofService.png')},
       // {id: 12, src: require('../assets/EoPCards/Suits/DenialofService/KDenialofService.png')},
