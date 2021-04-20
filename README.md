@@ -1,1 +1,1 @@
-# vue-firebase-chat-app
+# threat-modelling-app
