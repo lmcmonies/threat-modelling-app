@@ -1,17 +1,17 @@
 <template>
   <div>
-    <!-- <section>
+    <section>
       <p>New Game</p>
       <input class="input" v-model="gameName" required placeholder="Enter Game Name" />
       <label class="label" for="players">Players:</label>
       <select name="players" v-model="totalPlayers" id="players" required>
        <option class="option" value="3">3</option> -->
-       <!-- <option class ="option" value="4">4</option>
+       <option class ="option" value="4">4</option>
        <option class="option" value="5">5</option>
        <option class="option" value="6">6</option> -->
-     <!-- </select>
+      </select>
     <button class="button" @click="createGame">Create</button>
-    </section> -->
+    </section> 
  
 
     <section>

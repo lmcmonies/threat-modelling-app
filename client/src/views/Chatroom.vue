@@ -186,7 +186,7 @@ export default {
         }
        }     
        clearInterval(decrementTimer)
-       decrementTimerValue(30)
+       decrementTimerValue(45)
      }else{
        decrementTimerValue(timerVal.value -1)
      }
