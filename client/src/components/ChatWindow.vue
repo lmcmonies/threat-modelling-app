@@ -1,9 +1,17 @@
+<!-- 
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+-->
 <template>
+<!-- The messages that are saved to the database are formatted and displayed using this code.
+A for loop is used display the users name and message  -->
 <div class="chat-window">
     <div v-if="error">{{error}}</div>
     <div v-if="documents" class="messages">
         <div v-for="doc in formattedDocuments" :key="doc.id" class="single">
-           <!-- <span class="name">{{doc.name}}</span> -->
             <span class="name">{{doc.name}}</span>
             <span class="message">{{doc.message}}</span>
         </div>
@@ -12,9 +20,8 @@
 </template>
 
 <script>
-import {formatDistanceToNow} from 'date-fns'
 import getMessages from '../composables/getMessages'
-import { computed, onUpdated, ref } from 'vue'
+import {computed} from 'vue'
 import {useRoute} from 'vue-router'
 
 export default {
@@ -23,26 +30,21 @@ setup(){
      let gameId = route.params.id.toString()
      let subCollection = 'messages'
      let collection = 'games'
+
+     //the getMessages composable is used to retrieve the messages from the database.  
     const { error, documents } = getMessages(collection, gameId, subCollection)
 
+   //the documents retrieved from the database are formatted before being passed to the template
+   // to be displayed to the user.
     const formattedDocuments = computed(() => {
      if(documents.value){
          return documents.value.map(doc => {
-            // let time = formatDistanceToNow(doc.createdAt.toDate())
-             return {...doc, //createdAt: time
-              }
+             return {...doc}
          })
      }
     })
-
-    //const messages = ref(null)
-
-    // onUpdated(() => {
-    //     messages.value.scrollTop = messages.value.scrollHeight
-    // })
-
     return { error, documents, formattedDocuments, }
-}
+ }
 }
 </script>
 
@@ -58,6 +60,4 @@ font-weight: bold;
 margin-right: 6px;
 margin-left: 10px;
 }
-
-
 </style>

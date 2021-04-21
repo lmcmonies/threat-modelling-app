@@ -1,7 +1,15 @@
+/*
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+*/
 import { ref } from 'vue'
 import { projectFirestore } from '../firebase/config'
 
-
+//composable that retrieves a single document from the database. 
+//e.g. game document
 const getDocument = (collection, documentId) => {
     const document = ref(null)
     const error = ref(null)

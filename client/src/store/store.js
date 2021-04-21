@@ -1,8 +1,13 @@
+/*
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+*/
 
+//Vuex central store. Single source of truth for the application interface. 
 import {createStore} from 'vuex'
-import getDocument from '../composables/getDocument'
-import {useRoute} from 'vue-router'
-
 
 export default createStore({
   state: {
@@ -21,13 +26,6 @@ export default createStore({
       {id: 7, src: require('../assets/EoPCards/Suits/InformationDisclosure/QInformationDisclosure.png')},
       {id: 8, src: require('../assets/EoPCards/Suits/DenialofService/KDenialofService.png')},
       {id: 9, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/JElevationofPrivilege.png')}
-      // {id: 10, src: require('../assets/EoPCards/Suits/DenialofService/ADenialofService.png')},
-      // {id: 11, src: require('../assets/EoPCards/Suits/DenialofService/JDenialofService.png')},
-      // {id: 12, src: require('../assets/EoPCards/Suits/DenialofService/KDenialofService.png')},
-      // {id: 13, src: require('../assets/EoPCards/Suits/DenialofService/QDenialofService.png')},
-      // {id: 14, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/5ElevationofPrivilege.png')},
-      // {id: 15, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/6ElevationofPrivilege.png')},
-      // {id: 16, src: require('../assets/EoPCards/Suits/ElevationofPrivilege/7ElevationofPrivilege.png')}
     ],
     shuffledCardsArray: [],
     players: [],
@@ -50,20 +48,14 @@ playZone: [],
 
     decrementTimerValue(state, value){
      state.timerValue = value
-     //console.log("STATE TIMER VAL: " + state.timerValue)
     },
 
     updatePlayerId(state, playerId){
     state.playerId = playerId
-    //console.log("Player Id From Store: " + playerId)
     },
 
     updatePlayersCards(state, playersCards){
      state.playersCards = playersCards
-    //  for(let i=0; i<playersCards.length; i++){
-    //   console.log("Players Cards Store: " + state.playersCards[i].id)
-    //  }
-  
     },
 
     updateGameId(state, id){
@@ -75,8 +67,6 @@ playZone: [],
         if(state.playZone.length < 1){
             state.playZone.push(card)
         }
-
-    //console.log('card: ', card.src)
     },
 
     shuffleCards(state){   
@@ -92,33 +82,16 @@ playZone: [],
         state.shuffledCardsArray = state.allCardsArray.map(a => ({...a}));
 
         state.shuffledCardsArray.forEach(function(card){
-            //console.log(card.src)
         })
 
     },
 
-    distributeCards(state, totalPlayers){
-     //let totalPlayers = state.players.length 
+    distributeCards(state, totalPlayers){ 
      let data = {
       id: document.value.id
     }
+   },
 
-    console.log("Store ID: " + data.id)
-    //  let numOfCards = state.shuffledCardsArray.length 
-    //  let cardDistribution = numOfCards / totalPlayers
-    // //  console.log("Total Players: " + totalPlayers)
-    // //  console.log("Total Cards: " + numOfCards)
-    // //  console.log("Card Distribution: " + cardDistribution)
-
-    // let min = 0
-    // let max = cardDistribution
-    // state.players.forEach(function(player){
-    //  player.cards = state.shuffledCardsArray.slice(min, max)
-    //  min += cardDistribution
-    //  max += cardDistribution
-    //  //console.log(player.playerId, player.cards)
-    // })
-},
   },
   actions: {
   updatePlayZone({commit}, card){
@@ -140,12 +113,8 @@ playZone: [],
 
   updatePlayersArray({commit}, players){
     commit('updatePlayersArray', players)
-  }
- 
-      
-    
+  }  
 }
-
-  })
+})
 
 

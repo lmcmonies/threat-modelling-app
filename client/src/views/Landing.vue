@@ -1,3 +1,13 @@
+<!-- 
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+-->
+
+<!-- Provides a landing page view for the application. Uses a CSS carousel to display different images.
+Entry point of the application. -->
 <template>
 <div class="container">
    <ul class="slideshow">
@@ -11,8 +21,6 @@
     <div id="landing-header">
         <button class="button" @click="$router.push('welcome')">Threat Model</button>
     </div>
-    
-   
 </div>
 </template>
 

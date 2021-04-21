@@ -1,5 +1,13 @@
+<!-- 
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+-->
 <template>
-  <form @submit.prevent="handleSubmit">
+<!-- Takes users details in login form and uses submitUser() to log them in. -->
+  <form @submit.prevent="submitUser">
     <input type="email" required placeholder="email" v-model="email">
     <input type="password" required placeholder="password" v-model="password">
     <div class="error">{{ error }}</div>
@@ -8,34 +16,27 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import {ref} from 'vue'
 import useLogin from '../composables/useLogin'
-import {projectFirestore, aUnion} from '../firebase/config'
 
 export default {
   setup(props, context) {
-    // refs
+    // refs watching for user input
     const email = ref('')
     const password = ref('')
-
-      //let data =
-          // {username:{cards:[],totalPoints:0, isReady: false}}
-
-    // let data = ["12345678"]
-   // var docRef = projectFirestore.collection('games').doc('2X0kk3Wu4fzhv3N3dn2d');
-        
+    
+    //useLogin() composable used to log user in. 
     const { error, login } = useLogin()
 
-    const handleSubmit = async () => {
+   //calls useLogin() and passes user details to log them in. 
+    const submitUser = async () => {
       await login(email.value, password.value)
-    //  await docRef.update({players: aUnion(data)})
 
       if (!error.value) {
-        console.log('user logged in')
         context.emit('login')
       }
     }
-    return { email, password, handleSubmit, error}
+    return { email, password, submitUser, error}
   }
 }
 </script>
@@ -49,13 +50,12 @@ export default {
   padding: 50px;
   width:30%;
   position: fixed;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
- 
-
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
+
 .h1{
  text-align: center;
 }
@@ -70,7 +70,6 @@ input[type=email], select {
   border-radius: 4px;
   box-sizing: border-box;
 }
-
 
 input[type=password], select {
   font-family: 'Courier New';

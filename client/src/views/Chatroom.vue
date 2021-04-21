@@ -1,11 +1,17 @@
+<!-- 
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+-->
+
+<!-- The main view for the application. Imports components such as navbar, chat messenger, playzone and hand area
+-->
 <template>
   <div class="container">
-    
-
     <Navbar/>
     <ChatBox class="chat-box"/>
-
-    
      <div v-if="document.currentTurn.playerId === pid && document.pollOpen === false && document.gameFinished === false">
        <h1 class="h1">Your Turn</h1>
           </div>
@@ -30,10 +36,6 @@
     <br>
         <PlayZone/>
         <HandArea/>
- 
-  
-     
-     
   </div>
 </template>
  
@@ -67,27 +69,22 @@ export default {
        let subCollection = 'players'
     
     const { document, error } = getDocument(collection, documentId)
+
     //players
     const { documents, err} =  getSubCollection(collection, documentId, subCollection)
 
-      var gameRef = projectFirestore.collection('games').doc(documentId)
-       var subRef = projectFirestore.collection('games').doc(documentId).collection('players')
+    var gameRef = projectFirestore.collection('games').doc(documentId)
+    var subRef = projectFirestore.collection('games').doc(documentId).collection('players')
 
-   const {shuffledCards} = useGetters(['shuffledCards'])
-    const {shuffleCards} = useMutations(['shuffleCards'])
+    const {shuffledCards} = useGetters(['shuffledCards'])
     const {distributeCards} = useMutations(['distributeCards'])
-      const {updatePlayersArray} = useActions(['updatePlayersArray'])
     const  distribute = () => distributeCards()
    
     let pid = computed(() => store.state.playerId ) 
    
-     // let playersIds = computed(() => store.state.players)
-
-       let timerVal = computed(() => store.state.timerValue) 
-       const {decrementTimerValue} = useActions(['decrementTimerValue'])
-     let players = []
-
-    
+    let timerVal = computed(() => store.state.timerValue) 
+    const {decrementTimerValue} = useActions(['decrementTimerValue'])
+    let players = []
 
   //watching players
   watch(documents, async () => {
@@ -102,11 +99,10 @@ export default {
        players.push(playerIds[x])
      }
     }
-    // console.log("FROM DOCUMENTS: "  +players)
   })
 
 
-//Manages Turns 
+//Manages Turns. Game document being watched for changes. 
   watch(document, async() => {
     let doc = {
       occupied: document.value.playZoneOccupied,
@@ -119,22 +115,9 @@ export default {
       no: document.value.poll.no,
       totalCards: document.value.totalCards,
       gameFinished: document.value.gameFinished
-      //playersPoints: document.value.playersPoints
     }
 
- 
-    //console.log("Players Points: " + doc.playersPoints)
-    //console.log("YES:" + doc.yes)
-  //   console.log("FROM DOCUMENT: " + players)
-  //   //console.log("PLAYER" + players.value[0].id)
-  //  console.log("PLAYERID: " + doc.currentTurnId)
-  //   if(doc.currentTurnId === "undefined"){
-  //     let player = players[0].id
-  //     console.log("PLAYER" + player)
-  //      gameRef.update({currentTurn: {playerId: player}})
-  //   }
-    
-   //Updates Points Total Of Player Who PLayed Card
+   //Updates Points Total Of Player Who Played Card
     if(doc.yes + doc.no === doc.totalPlayers){ // if total votes === total players
        if(pid.value === doc.previousTurn){
         if(doc.yes > doc.no){ //if yes is greater than no
@@ -148,12 +131,10 @@ export default {
      for(let v=0; v < players.length; v++){
         subRef.doc(players[v].id).update({pollSubmitted: false})
       }
-     players.splice(0,players.length)
-    //  console.log("Players After Call To DB: " + players)
-
+      players.splice(0,players.length)
+   
       if(doc.totalCards === 0)
       gameRef.update({gameFinished:true})
-
       }
     
 
@@ -177,12 +158,12 @@ export default {
         gameRef.update({playZoneOccupied: false, playZoneCardId: {}, pollOpen: true,
         currentTurn:{index:index, nextTurn: turn,playerId:players[doc.nextTurn].id, 
         previousPlayerId: players[doc.nextTurn -1].id}})
-        //players.splice(0,players.length)
+ 
         }else{
           gameRef.update({playZoneOccupied: false, playZoneCardId: {}, pollOpen: true,
         currentTurn:{index:index, nextTurn: turn,playerId:players[doc.nextTurn].id, 
         previousPlayerId: players[doc.totalPlayers -1].id}})
-        //players.splice(0,players.length)
+  
         }
        }     
        clearInterval(decrementTimer)
@@ -194,12 +175,13 @@ export default {
   }
   })
 
+//retrieves points total for each player from database. 
   let determineWinner = async () =>{
     console.log("WINNER")
     let doc = {
       gameFinished: document.value.gameFinished
     }
-       if(doc.gameFinished === true){
+      if(doc.gameFinished === true){
       let scores = []
       for(let u=0; u < players.length; u++){
         let data = {
@@ -209,14 +191,11 @@ export default {
         }
         scores.push(data)
       }
-
-      for(let t=0; t < scores.length; t++){
-        // console.log(scores[t].email + ": " + scores[t].totalPoints +" points")
-      }
       winner.value = scores
     }
   }
 
+//if yes is clicked by user then a point is added to the yes total of the poll 
   let pollYes = async () => 
   {
     console.log("Poll Yes")
@@ -246,14 +225,14 @@ export default {
          if(pollOpen.open){
          await gameRef.update({poll:{yes:poll.yes +1, no: poll.no}})
          players.splice(0,players.length)
-        //  console.log("Players After YES: " + players)
-         }
-        }
+            }
+          }
+       }
     }
-    }
-     }
   }
+ }
 
+//if no is clicked by user then a point is added to the no total of the poll 
   let pollNo = async () => {
     console.log("Poll No")
     let poll = {
@@ -267,6 +246,8 @@ export default {
      let totalCards = {
        cards: document.value.totalCards
      }
+
+
      if(totalCards.cards !== -1){
     for(let j=0; j < players.length; j++)
     {
@@ -283,15 +264,12 @@ export default {
          if(pollOpen.open){
           await gameRef.update({poll:{no:poll.no + 1, yes: poll.yes}})
           players.splice(0,players.length)
-          // console.log("Players After NO: " + players)
-        }
+             }
+         }
+       }
+      }
+     }  
   }
-     }
-    }
-     }
-      
-  }
-
 
     // if the user value is ever null, redirect to welcome screen
     watch(user, () => {
@@ -311,10 +289,10 @@ export default {
 }
 
 .container{
-    overflow-y: auto;
-    font-family: 'Courier New';
-    background-color: rgb(22, 22, 22);
-    color: white;
+  overflow-y: auto;
+  font-family: 'Courier New';
+  background-color: rgb(22, 22, 22);
+  color: white;
 }
 
  .button {
@@ -322,7 +300,7 @@ export default {
   font-size: 30px;
   border-radius: 4px;
   font-family: 'Courier New';
-    background-color: rgb(22, 22, 22);
+  background-color: rgb(22, 22, 22);
   color: white;
   border: 2px solid #4CAF50;
   width: 15%;
@@ -332,7 +310,7 @@ export default {
 }
 .button:hover{
   background-color: #45a049;
-     font-family: 'Courier New';
+  font-family: 'Courier New';
 }
 
 .button2 {
@@ -340,7 +318,7 @@ export default {
   font-size: 30px;
   border-radius: 4px;
   font-family: 'Courier New';
- background-color: rgb(22, 22, 22);
+  background-color: rgb(22, 22, 22);
   color: white;
   border: 2px solid red;
   width: 15%;
@@ -350,7 +328,7 @@ export default {
 }
 .button2:hover{
   background-color: red;
-     font-family: 'Courier New';
+  font-family: 'Courier New';
 }
 .button3 {
   font-family: 'Courier New';
@@ -367,19 +345,19 @@ export default {
 }
 .button3:hover{
   background-color:hotpink;
-     font-family: 'Courier New';
+  font-family: 'Courier New';
 }
 .hand-area{
    position: fixed;
    bottom: 0;
-    height: 100%;
-    width: 58%;
+   height: 100%;
+   width: 58%;
 }
 .play-zone{
    position: fixed;
-    bottom: 0;
-    height: 100%;
-    width: 21%;
+   bottom: 0;
+   height: 100%;
+   width: 21%;
 }
 .chat-box{
  padding-top: 10px;
@@ -391,16 +369,15 @@ export default {
    border-radius: 4px;
    width: 10%;
    color: hotpink;
-    margin-top: 10px;
- 
-   
+   margin-top: 10px;  
 }
+
 .poll{
 width: 40%;
 display:inline-block;
 }
 
 .stop-watch{
-  height: 70px;
+ height: 70px;
 }
 </style>

@@ -1,4 +1,15 @@
+<!-- 
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+-->
 <template>
+<!-- The Cards for each player are retrieved from the database and displayed
+using a for loop.
+uupdatePlayZone() is a method that ensures when a card in the hand area is clicked 
+the card is moved to the play zone if it's that players turn. -->
   <div class="handArea">
         <div v-for="card in pCards" v-bind:key="card.id">
            <figure><img class="card" :src="card.src" @click="updatePlayZone(card)"/></figure>
@@ -7,26 +18,25 @@
 </template>
 
 <script>
-import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
+import {useMutations, useActions} from '../composables/useStore'
 import {useStore} from 'vuex'
 import {useRoute} from 'vue-router'
 import getUser from '../composables/getUser'
 import getDocument from '../composables/getDocument'
 import getSubCollection from '../composables/getSubCollection'
 import getSubSubCollection from '../composables/getSubSubCollection'
-import { computed, onUpdated, ref, watch } from 'vue'
-import {projectFirestore, aUnion, timestamp, decrement} from '../firebase/config'
+import {computed, watch} from 'vue'
+import {projectFirestore} from '../firebase/config'
 
 export default {
     setup(){
-       const { user } = getUser()
+  const { user } = getUser()
 
   const route = useRoute()
-    let shuffledCards = computed(() => store.state.shuffledCardsArray)
-   
 
-//console.log("ID" + playerId.value)
-  
+  //retrieves shuffled cards array from database.
+  let shuffledCards = computed(() => store.state.shuffledCardsArray)
+   
   let gameId = route.params.id.toString()
 
   var subRef = projectFirestore.collection('games').doc(gameId).collection('players')
@@ -36,32 +46,29 @@ export default {
   const {shuffleCards} = useMutations(['shuffleCards'])
   const {updatePlayerId} = useActions(['updatePlayerId'])
   const {updatePlayersCards} = useActions(['updatePlayersCards'])
-    const {updatePlayersArray} = useActions(['updatePlayersArray'])
 
   let documentId = route.params.id.toString()
   let collection = 'games'
   let subCollection = 'players'
   let subSubCollection = 'cards'
-  //let subDocId =  playerId //'8uHhFCmAvv4Tb6EVTD8T'
 
  
 
-  //games
+  //getDocument composable used to retrieve the relevant game from the database.
   const { document, err} =  getDocument(collection, documentId)
 
-  //players
+  //getSubCollection used to retrieve the relevant players for the game from the database. 
   const { documents, error} =  getSubCollection(collection, documentId, subCollection)
-
+  
+  //setTimeout() ensures that players id can be retrieved from the store and passed to composable
+  //getSubSubCollection which retrieves a players cards. 
   const {cards, cardsError} = setTimeout(async () =>{ 
       let pid = computed(() => store.state.playerId ) 
-      //  console.log("RETRIEVING PID: " + pid.value)
        const {cards, cardsError} = await getSubSubCollection(collection, documentId, subCollection, pid.value,subSubCollection ) 
-       
        watch(cards, async () => {
          let playersCards = []
        for(let i=0; i< cards.value.length; i++){
          playersCards.push(cards.value[i])
-        //  console.log("CARD: " + cards.value[i].id)
        }
        updatePlayersCards(playersCards)
        })
@@ -70,181 +77,157 @@ export default {
 
 let pCards = computed(() => store.state.playersCards)
 
+//global players array containing ids of all players in the game.
 let players = []
-//let playersComplete = []
 
 
-//watching players
+
+//watching documents =  players for changes. Adds player to a playerIds array if they are not already in the array.
+//checks player id to do this. 
   watch(documents, async () => {
-   // console.log("PLAYERS")
         let playerIds = []
     for(let i=0; i < documents.value.length; i++){
       if(playerIds[i] !== documents.value[i].id){
       playerIds.push(documents.value[i])
       }
     }
-    //console.log(playerIds)
+   
+   //once number of players in array is equal to number of players selected to play game
+   //all players in playersIds array are pushed into a global players array
     if(playerIds.length === document.value.totalPlayers){
      for(let x=0; x< playerIds.length; x++){
        players.push(playerIds[x].id)
-       //playersComplete.push(playerIds[x])
-        // console.log("Players Array: " + players[x])
-     //  console.log("Players Complete: " + playersComplete[x])
-
+   
+       //adds a players id to the vuex store which is used in the process of retrieving their cards.
        for(let i=0; i < documents.value.length; i++){
        if(user.value.email === documents.value[i].email){
          updatePlayerId(documents.value[i].id)
        }
        }
      }
-    }
-         // updatePlayersArray(players)
-    // let currentTurn = {
-    //   turn: document.value.currentTurn
-    // }
-    // // //console.log("Current Turn Index: " + currentTurn.turn)
-    // // for(let j=0; j < players.length; j++){
-    //   console.log("PLAYER INDEX: " + j)
-    //   if(j === currentTurn.turn){
-    //        subRef.doc(players[currentTurn.turn]).update({turn: true})
-    //        gameRef.update({currentTurn:j})
-    //   }
-    // }
- 
+    } 
   })
 
+// distributes cards from shuffled cards array to each player in the game. 
  let distributeCards = () => {
       
-      //console.log("DISTRIBUTING CARDS")
-      // shuffledCards.value.forEach(card => {console.log(card.id)})
-
+     //retrieves total players in game
      let docData = {totalPlayers:document.value.totalPlayers}
-
+     
+     //holds total players value
      let totalPlayers = docData.totalPlayers
-    // console.log("Total Players: " + totalPlayers)
+
+     // holds total number of cards
      let numOfCards =  shuffledCards.value.length
-     //console.log("Shuffled Cards Length: "+ shuffledCards.value.length)
-
+   
+     // determines card distribution based on total num of players and cards.
      let cardDistribution = numOfCards / totalPlayers
-     //console.log("Card Distribution: " + cardDistribution)
-
+     
+     //min and max are the ids for the card sin the array. min starts at 0 and max at card distribution number
+     //e.g 3 players in game, card distribution = 3
      let min = 0
      let max = cardDistribution
     
+    //cardGenerator() called for each player in players array.
+    //returns an array of cards based on the min and max values above.
+    //the min and max values are updated so the next player recieves cards from further along 
+    //in the cards array. 
+    //Assuming 3 players  playing game -> player1: index 0-2, player2: index 3-5, player3: index 6-8 
     let cardGenerator = () => {
-        let cardIds = []
-        // console.log("Min: " + min)
-        // console.log("Max: " + max)
+      let cardIds = []
       
       for(let i = min; i<max; i++)
       {
-      //  console.log("Card ID: " + shuffledCards.value[i].id)
        cardIds.push(shuffledCards.value[i])
       }
-
        min += cardDistribution
        max += cardDistribution
        return cardIds
     } 
 
-
-   for (let i=0; i < players.length; i++){
+      // for each player, cardGenerator() called
+      for (let i=0; i < players.length; i++){
         let cardIds = cardGenerator()
-        // console.log(cardIds)
          for (let x=0; x < cardIds.length; x++){
+          //for each player, for each card in array 
+          //used player id to save their cards to database.
           subRef.doc(players[i]).collection('cards').add(cardIds[x])
         }
      }
+     //update game to active once all players have cards. 
      gameRef.update({isGameActive: true})
  }
 
+ //watching document = game for changes. 
   watch(document, async () => {
-    // console.log("GAME")
- 
-       let data = {
+    //destructure game object held in document.
+    let data = {
           playersJoined: document.value.playersJoined,
           totalPlayers: document.value.totalPlayers,
           gameActive: document.value.isGameActive
         }
+ 
+     //if number of players joined equal to total players for the game
      if(data.playersJoined === data.totalPlayers){
-      if(!data.gameActive){
-      shuffleCards()
-      distributeCards()
+       //if the game is not active
+       if(!data.gameActive)
+       {
+       //shuffled the cards and then distribute them to each player. 
+       shuffleCards()
+       distributeCards()
        }
      }
     });
-
+    
+    //when a card is clicked in hand area, updatePlayZone() takes data from a card and 
+    //sends it to the game document in the db so it can be displayed in the play zone. 
     let updatePlayZone = (card) => {
-
       let player = []
+
+      //destructure game document
       let game = {
-        occupied: document.value.playZoneOccupied,
+         occupied: document.value.playZoneOccupied,
          currentPlayer: document.value.currentTurn.playerId,
          pollOpen: document.value.pollOpen,
          cardNum: document.value.totalCards
       }
+
+      //destructure card document
       let data = {
         id: card.id,
         src:card.src,
         cardId: card.cardId
       }
-      let pid = computed(() => store.state.playerId ) 
+
+      //retrieve players id from vuex store
+      let pid = computed(() => store.state.playerId )
+      
+      //for each player in players array
        for(let x=0; x < players.length; x++){
-        // console.log("PLAYERS: " + players[x])
-        //  console.log(pid.value)
+         //if ids match then push that players id into the local player array.
          if(pid.value === players[x]){
-           //console.log("PID: " + pid.value + "ID: " + players[x])
            player.push(players[x])
          }
        }
 
-    for(let i=0; i < player.length; i++){
-      if(player[i] === game.currentPlayer && game.occupied === false && game.pollOpen === false && game.cardNum !== 0)
-      {
-        console.log("CARD ID: " + data.cardId)
+     //for each player in player array (there is only ever one at a time, the player who played a card)
+      for(let i=0; i < player.length; i++){
+        //if its that players turn, the play zone is not occupied, poll is not open and total cards left in game
+        //is not 0
+        if(player[i] === game.currentPlayer && game.occupied === false && game.pollOpen === false && game.cardNum !== 0)
+         {
+           //delete that card from the players hand area
           subRef.doc(player[i]).collection('cards').doc(data.cardId).delete().then(() => {
-          //  console.log("Document successfully deleted!");
           }).catch((error) => {
            console.error("Error removing document: ", error);
           });
-          // console.log("Updating Play Zone")
+          //send the cards data to the game document, update play zone occupied to true and take one away from total cards 
           gameRef.update({playZoneCardId: data, playZoneOccupied: true, totalCards: game.cardNum -1})
-          
-
+         }
       }
     }
-    }
-
-
-// watch(cards, async () => {
-//   console.log("CARDS")
-//   let cardsArray = await retrieveCards()
-//   for(let x=0; x < cardsArray.length; x++){
-//     console.log("CardID: " + cardsArray[x].id)
-//     console.log("CARD SRC: " + cardsArray[x].src)
-//   }
-// })
-
-
-
-//     let retrieveCards = async () => {
-//       let cardsArray = []
-//       for(let i=0; i < documents.value.length; i++){
-//       if(user.value.email === documents.value[i].email){
-//         for(let x=0; x < cards.value.length; x++){
-//           cardsArray.push(cards.value[x])
-//           //console.log(cards.value[x].id)
-         
-//         }
-//       }
-//     }
-//     return cardsArray
-
-//     }
 
     return {document, documents, error, err, pCards, cardsError, updatePlayZone}
-            
-    
     }
 }
 </script>
@@ -264,31 +247,22 @@ let players = []
   overflow: auto;
   padding-bottom: 10px;
   margin-bottom: 10px;
-     /* position: absolute; */
-    /* bottom: 0; */
-    left: 0; 
-  
-  /* position: relative;
-    top: 100%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%); */
-
-    
+  left: 0;    
 }
+
 .single{
   background: white;
 }
 
 .card{
-        float:left; 
-        width:215px;
-        height:350px;
-        position:relative;
-        background-size: 100% 100%;
-        bottom: 50%;
-        padding: 0px 15px;
-        word-wrap: normal;
+  float:left; 
+  width:215px;
+  height:350px;
+  position:relative;
+  background-size: 100% 100%;
+  bottom: 50%;
+  padding: 0px 15px;
+  word-wrap: normal;
      
 }
 .handArea figure img {
@@ -318,7 +292,7 @@ let players = []
 
 .button:hover{
   background-color: #45a049;
-     font-family: 'Courier New';
+  font-family: 'Courier New';
 }
 
 </style>

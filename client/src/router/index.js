@@ -1,3 +1,10 @@
+/*
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+*/
 import { createRouter, createWebHistory } from 'vue-router'
 import Welcome from '../views/Welcome.vue';
 import Chatroom from '../views/Chatroom.vue'
@@ -5,7 +12,7 @@ import Landing from '../views/Landing.vue'
 import CreateGame from '../views/CreateGame.vue'
 import { projectAuth } from '../firebase/config'
 
-// auth guards
+// auth guards. ensures certain routes cannot be accessed if user isnt logged in. 
 const requireAuth = (to, from, next) => {
   let user = projectAuth.currentUser
   if (!user) {
@@ -15,15 +22,7 @@ const requireAuth = (to, from, next) => {
   }
 }
 
-// const reuireNoAuth = (to, from, next) => {
-//   let user = projectAuth.currentUser
-//   if (user) {
-//     next({name: 'chatroom'})
-//   } else {
-//     next()
-//   }
-// }
-
+//all the routes for the application for the different views. 
 const routes = [
  {
    path: '/',
@@ -48,6 +47,7 @@ const routes = [
   component: Chatroom,
   beforeEnter: requireAuth
 },
+
  //catchall 404
  {
   path: '/:catchAll(.*)',

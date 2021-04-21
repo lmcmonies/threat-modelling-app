@@ -1,3 +1,12 @@
+/*
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+*/
+
+//This composable is used to log a user in to their account.
 import { ref } from 'vue';
 import { projectAuth } from '../firebase/config';
 
@@ -7,8 +16,6 @@ const login = async (email, password) => {
   error.value = null
 
   try {
-    // INTERNAL TIMER MAY CAUSE EXTRA ERROR IN THE CONSOLE WHEN USING AWAIT
-    // FIREBASE WILL OVERHAUL IN THE FUTURE & EVERYTHING STILL WORKS
     const res = await projectAuth.signInWithEmailAndPassword(email, password)
     error.value = null
     console.log(res)
@@ -16,7 +23,7 @@ const login = async (email, password) => {
   }
   catch(err) {
     console.log(err.message)
-    error.value = 'Incorrect login credentials'
+    error.value = 'Incorrect login details'
   }
 }
 

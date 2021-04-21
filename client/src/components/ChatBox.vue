@@ -1,5 +1,15 @@
+<!-- 
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+-->
 <template>
 <div class="chatbox">
+  <!-- This chat box component provides a container for two other components: 
+  The chat window where messages are displayed.
+  The chat form where users can type a message and submit it. -->
   <ChatWindow/>
   <NewChatForm/>
 </div>

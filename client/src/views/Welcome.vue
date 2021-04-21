@@ -1,13 +1,22 @@
+<!-- 
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+-->
+
+<!-- LoginForm and SignupForm components are used in this view-->
 <template>
   <div class="welcome container">
     <div v-if="showLogin">
       <h1>Login</h1>
-      <LoginForm @login="enterChat"/>
+      <LoginForm @login="enterGame"/>
       <p>No account yet? <span @click="showLogin = false">Signup</span> instead.</p>
     </div>
     <div v-else>
       <h1>Sign up</h1>
-      <SignupForm @signup="enterChat"/>
+      <SignupForm @signup="enterGame"/>
       <p>Already registered? <span @click="showLogin = true">Login</span> instead.</p>
     </div>
   </div>
@@ -25,32 +34,27 @@ export default {
     const showLogin = ref(true)
     const router = useRouter()
 
-    const enterChat = () => {
+    const enterGame = () => {
       router.push({name: 'create'})
     }
-    return { showLogin, enterChat }
+    return { showLogin, enterGame }
   }
 }
 </script>
 
 <style scoped>
   .welcome {
-    
-  
-
     font-family: 'Courier New';
     text-align: center;
     padding: 20px 0;
-    /* border: 1px solid #45a049; */
     width: 30%;
-     position: fixed;
+    position: fixed;
     top: 50%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    
   }
-  /* form styles */
+
   .welcome form {
     width: 300px;
     margin: 20px auto;

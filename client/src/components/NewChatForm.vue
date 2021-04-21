@@ -1,10 +1,18 @@
+<!-- 
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+-->
 <template>
+<!-- Takes a message typed in by a user and submits it to database.-->
 <div class="container">
   <form>
       <textarea
       placeholder="type a message..."
       v-model="message"
-      @keypress.enter.prevent="handleSubmit">
+      @keypress.enter.prevent="submitMessage">
       </textarea>
       <div class="error">{{error}}</div>
   </form>
@@ -12,12 +20,13 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import {ref} from 'vue'
 import getUser from '../composables/getUser'
-import { timestamp } from '../firebase/config'
+import {timestamp} from '../firebase/config'
 import useSubCollection from '../composables/useSubCollection'
 import ChatWindow from '../components/ChatWindow.vue'
 import {useRoute} from 'vue-router'
+
 export default {
     components:{
      ChatWindow
@@ -29,12 +38,13 @@ export default {
          let subCollection = 'messages'
          let collection = 'games'
 
-        const { user } = getUser()
+        const {user} = getUser()
         const {addDoc, error} = useSubCollection(collection, gameId, subCollection)
 
         const message = ref('')
 
-        const handleSubmit = async () => {
+        //submits message to database.
+        const submitMessage = async () => {
         const chat = { 
             name: user.value.displayName,
             message: message.value,
@@ -47,18 +57,15 @@ export default {
             if(!error.value){
               message.value = ''
             }
-           
         }
-        return { message, handleSubmit }
+        return { message, submitMessage}
     }
-
 }
 </script>
 
 <style scoped>
 form {
-    margin:10px;
-    
+    margin:10px; 
 }
 
 textarea {

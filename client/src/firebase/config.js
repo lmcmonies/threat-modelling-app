@@ -1,7 +1,17 @@
+/*
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+*/
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 
+//The firebaseConfig object must be inserted here. This requires that you create a project on firebase.
+//Firebase provides this object that includes an apiKey, databaseURL etc. for working with the database.
+//This is required or the app won't work. 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyBYsHmoxHo4TKeTzp-SQl5viKjjqP_0stw",

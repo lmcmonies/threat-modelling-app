@@ -1,5 +1,14 @@
+/*
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+*/
 import { ref, watchEffect, reactive } from 'vue'
 import { projectFirestore } from '../firebase/config'
+
+//composable that retrieves all message documents in a messages sub collection. 
 
 const getMessages = (collection, documentId, subCollection) => {
     const documents = ref(null)
@@ -16,45 +25,20 @@ const getMessages = (collection, documentId, subCollection) => {
         let results = []
         snap.docs.forEach(doc => {
 
-            //doc.data().createdAt - required, otherwise user recieves 
-            //local version of snap using local createdAt. Meaning, 
-            // user recieves not fully created snapshot. 
+        //doc.data().createdAt - required, otherwise user recieves 
+        //local version of snap using local createdAt. Meaning, 
+        // user recieves not fully created snapshot. 
          results.push({...doc.data(), id:doc.id})
-        //   console.log(doc.data())
-        //   for (let i=0; i<results.length; i++){
-        //     console.log("EMAIL: " + results[i].email)
-        // }
-          
         })
        
-
         documents.value = results
-
-
-    //for (let doc in documents){
-         //console.log(doc)
-        //  console.log(documents)
-        // for(let i=0; i <documents['value'].length; i++){
-        //    console.log("SUBDOC: " + documents['value'][i].id)
-        // }
-  //}
-        
-       
         error.value = null
     },  (err) => {
         console.log(err.message)
         documents.value = null
         error.value = 'could not fetch data'
     })
-
-    //executes when component it's being used in unmounts
-    //unsub from prev collection when watcher is stopped
-    // watchEffect((onInvalidate) => {
-    //   onInvalidate(() => unsub())
-    // })
-
     return { documents, error }
-    
 }
 
 export default getMessages

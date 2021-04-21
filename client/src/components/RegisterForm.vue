@@ -1,5 +1,13 @@
+<!-- 
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+-->
 <template>
-  <form @submit.prevent="handleSubmit">
+<!-- Form takes users details and submits them to database to register an account for them. -->
+  <form @submit.prevent="registerUser">
     <input type="text" required placeholder="username" v-model="username">
     <input type="email" required placeholder="email" v-model="email">
     <input type="password" required placeholder="password" v-model="password">
@@ -9,24 +17,27 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import {ref} from 'vue'
 import useSignup from '../composables/useSignup'
 export default {
   setup(props, context) {
-    // console.log(context)
+  
     // refs
     const username = ref('')
     const email = ref('')
     const password = ref('')
-    // useSignup
-    const { error, signup } = useSignup()
-    const handleSubmit = async () => {
+
+    // useSignup composable to register user.
+    const {error, signup} = useSignup()
+
+    //submits users details to database creating an account for them.
+    const registerUser = async () => {
       await signup(email.value, password.value, username.value)
       if (!error.value) {
         context.emit('signup')
       }      
     }
-    return { username, email, password, handleSubmit, error }
+    return { username, email, password, registerUser, error }
   }
 }
 </script>
@@ -40,13 +51,12 @@ export default {
   padding: 50px;
   width:30%;
   position: fixed;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
- 
-
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
+
 .h1{
  text-align: center;
 }
@@ -61,6 +71,7 @@ input[type=email], select {
   border-radius: 4px;
   box-sizing: border-box;
 }
+
 input[type=text], select {
   font-family: 'Courier New';
   width: 100%;
@@ -72,7 +83,6 @@ input[type=text], select {
   box-sizing: border-box;
 }
 
-
 input[type=password], select {
   font-family: 'Courier New';
   width: 100%;
@@ -82,6 +92,7 @@ input[type=password], select {
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
+
 .button {
   font-family: 'Courier New';
   font-size: 30px;

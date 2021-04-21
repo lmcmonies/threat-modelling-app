@@ -1,3 +1,12 @@
+/*
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+*/
+
+//This composable logs a user out of their account.
 import { ref } from 'vue'
 import { projectAuth } from '../firebase/config'
 

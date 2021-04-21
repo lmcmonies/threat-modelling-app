@@ -1,51 +1,50 @@
-
+<!-- 
+     Threat Modelling Game 
+     Final Year Dissertation Project 
+     Heriot Watt University
+     Author: Liam McMonies
+     Email: lm384@hw.ac.uk
+-->
   
 <template>
+ <!-- Navbar displays users name, provides a log out button and also a ready button which the user must click to 
+   to get the game started.-->
   <nav v-if="user">
-  
      <div class="title-container">
       <h1>Elevation of Privilege</h1>
-     
-        
       </div>
         <div>
       <p>Playing as {{ user.displayName }}</p>
-       
-
     </div>
-     
       
-      
-  
     <div>
        <div v-if="!isReady">
      <button  class="button" v-on:click="isReady=!isReady" v-bind:class="{isReady: isReady}" @click="readyToPlay">Ready?</button>
     </div>
        <div>
     </div>
-    <button class="button" @click="handleClick">Logout</button>
+    <button class="button" @click="handleLogout">Logout</button>
     </div>
   </nav>
 </template>
 
 <script>
-import {computed} from 'vue'
-
 import useLogout from '../composables/useLogout'
 import getUser from '../composables/getUser'
-import {projectFirestore, aUnion, increment} from '../firebase/config'
-import {useState, useGetters, useMutations, useActions} from '../composables/useStore'
+import {projectFirestore, increment} from '../firebase/config'
 import {ref} from 'vue'
 import {useRoute} from 'vue-router'
-import {useStore} from 'vuex'
 export default {
 
   setup() {
     const { logout, error } = useLogout()
     const { user } = getUser()
     const isReady = ref(false)
-    //let id = `${user.value.email.split('@')[0]}`
+    
+    //user email used to create a document for them in the database. 
     let id = `${user.value.email}`
+    
+    //data for a new user.
      let data = 
      {
       email:id,
@@ -53,44 +52,36 @@ export default {
       ready: true,
       pollSubmitted: false
      }
- const route = useRoute()
 
-  const store = useStore()
-  //const {gameId} = useGetters(['getGameId'])
-
-  let gameId = route.params.id.toString()
+     const route = useRoute()
+     
+     //retrieves game id from the URL
+     let gameId = route.params.id.toString()
     
-//let {gameId} = computed(() => store.state.gameId)
-//console.log(gameId)
-
     var subRef = projectFirestore.collection('games').doc(gameId).collection('players')
     var docRef = projectFirestore.collection('games').doc(gameId)
 
-        
-    const handleClick = async () => {
-      
+    //logs user out. uses method logout() in useLogout composable. 
+    const handleLogout = async () => {  
       await logout()
     }
-
+    
+    //updates 
     const readyToPlay = async () =>{
+      //isReady updated to true. hides button after clicked. 
       isReady.value=true
-      //console.log(isReady)
+      //data for user saved to database. 
       await subRef.add(data)
-
-     //await docRef.update({players: aUnion(data)})
-    //  await docRef.update({[id]:
-    //   {cards:[],
-    //    totalPoints:0,
-    //  }})
-
-     addOne()
+      //calls addOne() to increment playerJoined number in game document. 
+      addOne()
 
     }
-
+    
+    //increment playerJoined number in game document. 
     const addOne = async () => {
       await docRef.update({playersJoined: increment})
     }
-    return { handleClick, user, readyToPlay, isReady}
+    return { handleLogout, user, readyToPlay, isReady}
   }
 }
 </script>
