@@ -6,7 +6,7 @@
      Email: lm384@hw.ac.uk
 */
 
-//Vuex central store. Single source of truth for the application interface. 
+//Vuex central store. Single source of truth for the application interface
 import {createStore} from 'vuex'
 
 export default createStore({

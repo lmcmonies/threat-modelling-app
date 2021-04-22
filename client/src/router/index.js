@@ -29,6 +29,7 @@ const routes = [
    name: 'landing',
    component: Landing,
  },
+ 
  {
   path: '/welcome',
   name: 'welcome',

@@ -14,7 +14,6 @@
   <NewChatForm/>
 </div>
 </template>
-
 <script>
 import NewChatForm from '../components/NewChatForm.vue'
 import ChatWindow from '../components/ChatWindow.vue'
@@ -25,9 +24,7 @@ export default {
 
 }
 </script>
-
 <style>
-
 .chatbox{
     background-color: rgb(22, 22, 22);
     border-radius: 4px;
@@ -38,5 +35,4 @@ export default {
     overflow-x:hidden;
     max-height: 20vh;
 }
-
 </style>

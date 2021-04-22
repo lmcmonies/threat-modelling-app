@@ -20,17 +20,17 @@ A for loop is used display the users name and message  -->
 </template>
 
 <script>
-import getMessages from '../composables/getMessages'
+
 import {computed} from 'vue'
 import {useRoute} from 'vue-router'
 
+import getMessages from '../composables/getMessages'
 export default {
 setup(){
      const route = useRoute()
      let gameId = route.params.id.toString()
      let subCollection = 'messages'
      let collection = 'games'
-
      //the getMessages composable is used to retrieve the messages from the database.  
     const { error, documents } = getMessages(collection, gameId, subCollection)
 
